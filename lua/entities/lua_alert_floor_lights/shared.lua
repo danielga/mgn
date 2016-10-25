@@ -15,6 +15,7 @@ function ENT:SetupDataTables()
 	self:NetworkVar("Int", 0, "Width")
 	self:NetworkVar("Int", 1, "Depth")
 	self:NetworkVar("Int", 2, "SpriteSize")
+	self:NetworkVar("Int", 3, "LightCount")
 
 	if CLIENT then
 		self:NetworkVarNotify("Width", function(ent, name, old, new)
