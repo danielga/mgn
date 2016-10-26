@@ -8,7 +8,6 @@ end
 function ENT:OnRemove()
 	if self.AlertSound:IsPlaying() then
 		self.AlertSound:Stop()
-		self.AlertSound = nil
 	end
 end
 
