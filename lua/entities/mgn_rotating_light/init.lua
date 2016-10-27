@@ -5,10 +5,7 @@ include("shared.lua")
 
 function ENT:Initialize()
 	self:SetModel("models/props_c17/light_cagelight01_off.mdl")
-	self:PhysicsInit(SOLID_VPHYSICS)
-	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
-	self:SetUseType(SIMPLE_USE)
 	self:SetMoveType(MOVETYPE_NONE)
 
 	self.Spotlight1 = ents.Create("point_spotlight")
