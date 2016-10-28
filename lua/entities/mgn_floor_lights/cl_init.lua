@@ -4,6 +4,8 @@ ENT.Sprite = Material("sprites/light_glow02_add")
 ENT.Green = Color(0, 255, 0, 255)
 
 function ENT:Initialize()
+	self:AddEffects(bit.bor(EF_NOSHADOW, EF_NORECEIVESHADOW))
+
 	self.CurrentLight = 0
 end
 
