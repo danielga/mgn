@@ -92,6 +92,17 @@ mgn.LightLocations = {
 
 mgn.LightEntities = mgn.LightEntities or {}
 
+function mgn.PopulateLuaScreens()
+	if game.GetMap() == "gm_construct_m_222" and LuaScreen then
+		LuaScreen.AddConfig({
+			place = "mgn_control_computer",
+			pos = Vector(-13692, 2998, 14346),
+			ang = Angle(-45, 0, 0)
+		})
+	end
+end
+hook.Add("PopulateLuaScreens", "MGN", mgn.PopulateLuaScreens)
+
 function mgn.Initialize()
 	for i = 1, math.max(#mgn.AlarmLocations, #mgn.AlarmEntities) do
 		if not mgn.AlarmLocations[i] then

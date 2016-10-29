@@ -20,20 +20,20 @@ local white = Color(255, 255, 255, 255)
 local red = Color(255, 0, 0, 255)
 local green = Color(0, 255, 0, 255)
 function ENT:Draw3D2D(width, height)
-	self:DrawCenteredWordBox("CORE CONTROL PANEL", "Trebuchet24", w / 2, 30, white, red)
+	self:DrawCenteredWordBox("CORE CONTROL PANEL", "Trebuchet24", width / 2, 30, white, red)
 	
-	self:DrawCenteredWordBox("SELF-DESTRUCT", "Trebuchet24", w / 2, 100, red, white)
+	self:DrawCenteredWordBox("SELF-DESTRUCT", "Trebuchet24", width / 2, 100, red, white)
 	
-	self:DrawCenteredWordBox("NORMAL", "Trebuchet24", w / 2, 150, green, white)
+	self:DrawCenteredWordBox("NORMAL", "Trebuchet24", width / 2, 150, green, white)
 
 	if self.Denied then
-		self:DrawCenteredWordBox("ACCESS DENIED", "Trebuchet24", w / 2, 200, red, white)
+		self:DrawCenteredWordBox("ACCESS DENIED", "Trebuchet24", width / 2, 200, red, white)
 	elseif self.Granted then
-		self:DrawCenteredWordBox("ACCESS GRANTED", "Trebuchet24", w / 2, 200, green, white)
+		self:DrawCenteredWordBox("ACCESS GRANTED", "Trebuchet24", width / 2, 200, green, white)
 	end
 end
 
-function ENT.BackwardsClass:Think()
+function ENT:Think()
 	if (self.Denied or self.Granted) and CurTime() >= self.HideMessageTime then
 		self.Denied = false
 		self.Granted = false

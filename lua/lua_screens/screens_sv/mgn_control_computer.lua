@@ -1,9 +1,3 @@
-LuaScreen.AddConfig({
-	place = "mgn_control_computer",
-	pos = Vector(-13692, 2998, 14346),
-	ang = Angle(-45, 0, 0)
-})
-
 function ENT:Initialize()
 	local monitor = ents.Create("prop_physics")
 	monitor:SetModel("models/props_combine/combine_interface001.mdl")
