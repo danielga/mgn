@@ -2,6 +2,9 @@ ENT.Width  = 30
 ENT.Height = 25
 ENT.Scale  = 0.1
 
+ENT.SELF_DESTRUCT = 1
+ENT.CANCEL = 2
+
 if SERVER then
 	return
 end
@@ -24,7 +27,7 @@ function ENT:Draw3D2D(width, height)
 	
 	self:DrawCenteredWordBox("SELF-DESTRUCT", "Trebuchet24", width / 2, 100, red, white)
 	
-	self:DrawCenteredWordBox("NORMAL", "Trebuchet24", width / 2, 150, green, white)
+	self:DrawCenteredWordBox("CANCEL", "Trebuchet24", width / 2, 150, green, white)
 
 	if self.Denied then
 		self:DrawCenteredWordBox("ACCESS DENIED", "Trebuchet24", width / 2, 200, red, white)
@@ -57,8 +60,8 @@ function ENT:OnMouseClick(keycode)
 	local tw, th = surface.GetTextSize("SELF-DESTRUCT")
 	
 	if mx >= w / 2 - tw / 2 and mx <= w / 2 + tw / 2 and my >= 100 - th / 2 and my <= 100 + th / 2 then
-		self:CallOnServer("SELF-DESTRUCT")
+		self:CallOnServer(self.SELF_DESTRUCT)
 	elseif mx >= w / 2 - tw / 2 and mx <= w / 2 + tw / 2 and my >= 150 - th / 2 and my <= 150 + th / 2 then
-		self:CallOnServer("NORMAL")
+		self:CallOnServer(self.CANCEL)
 	end
 end

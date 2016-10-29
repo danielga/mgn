@@ -18,9 +18,9 @@ function ENT:CallCMD(ply, cmd)
 		return
 	end
 
-	if cmd == "SELF-DESTRUCT" then
+	if cmd == self.SELF_DESTRUCT then
 		mgn.ActivateAlert()
-	elseif cmd == "NORMAL" then
+	elseif cmd == self.CANCEL then
 		mgn.DisableAlert()
 	end
 end
