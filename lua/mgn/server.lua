@@ -26,7 +26,10 @@ mgn.AlarmLocations = {
 	{Position = Vector(-9247, -10621, -8351), Normal = Vector(0, 1, 0)},
 
 	-- Build basement
-	{Position = Vector(-6562, 2864, -15783), Normal = Vector(0, 1, 0)}
+	{Position = Vector(-6562, 2864, -15783), Normal = Vector(0, 1, 0)},
+
+	-- Build caves
+	{Position = Vector(8861, 4016, -15178), Normal = Vector (0, -1, 0)}
 }
 
 mgn.AlarmEntities = mgn.AlarmEntities or {}
