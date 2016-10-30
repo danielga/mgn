@@ -1,4 +1,4 @@
-local doorloc = LMVector(-2106, 5160, -110, "land_caves", true)
+local doorloc = LMVector(-2091, 4912, -70, "land_caves", true)
 local doorradius = 100
 local center = LMVector(-2083, 5142, -21, "land_caves", true)
 
