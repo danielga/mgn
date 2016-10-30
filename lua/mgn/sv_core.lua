@@ -17,6 +17,24 @@ hook.Add("PopulateLuaScreens", "mgn.PopulateLuaScreens", function()
 	end
 end)
 
+function mgn.SetAlertActive(b)
+	assert(type(b) == "bool", "Attempting to set activation status with a non-boolean.")
+
+	for i = 1, #mgn.AlarmEntities do
+		local pair = mgn.AlarmEntities[i]
+		pair.Light:SetEnabled(b)
+		pair.Siren:SetEnabled(b)
+	end
+
+	for i = 1, #mgn.LightEntities do
+		mgn.LightEntities[i]:SetEnabled(b)
+	end
+
+	ms.SetEmergencyTelevationMode(b)
+
+	SetGlobalBool("MGN_AlertActive", b)
+end
+
 function mgn.Initialize()
 	for i = 1, math.max(#mgn.AlarmLocations, #mgn.AlarmEntities) do
 		if not mgn.AlarmLocations[i] then
@@ -109,38 +127,6 @@ function mgn.Initialize()
 		end
 	end
 
-	SetGlobalBool("MGN_AlertActive", false)
+	mgn.SetAlertActive(false)
 end
 hook.Add("Initialize", "mgn.Initialize", mgn.Initialize)
-
-function mgn.ActivateAlert()
-	for i = 1, #mgn.AlarmEntities do
-		local pair = mgn.AlarmEntities[i]
-		pair.Light:SetEnabled(true)
-		pair.Siren:SetEnabled(true)
-	end
-
-	for i = 1, #mgn.LightEntities do
-		mgn.LightEntities[i]:SetEnabled(true)
-	end
-
-	ms.SetEmergencyTelevationMode(true)
-
-	SetGlobalBool("MGN_AlertActive", true)
-end
-
-function mgn.DisableAlert()
-	for i = 1, #mgn.AlarmEntities do
-		local pair = mgn.AlarmEntities[i]
-		pair.Light:SetEnabled(false)
-		pair.Siren:SetEnabled(false)
-	end
-
-	for i = 1, #mgn.LightEntities do
-		mgn.LightEntities[i]:SetEnabled(false)
-	end
-
-	ms.SetEmergencyTelevationMode(false)
-
-	SetGlobalBool("MGN_AlertActive", false)
-end
