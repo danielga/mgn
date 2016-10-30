@@ -43,14 +43,14 @@ function ms.SetEmergencyTelevationMode(e)
 
 	local door = door()
 	if e then
-		door:Fire"close"
-		door:Fire"lock"
+		door:Fire("close")
+		door:Fire("lock")
 	else
-		door:Fire"unlock"
-		door:Fire"open"
+		door:Fire("unlock")
+		door:Fire("open")
 	end
 
-	TelevatorSetEmergency(e)
+	ms.TelevatorSetEmergency(e)
 
 	Print("EmergencyMode", e and "ENABLED" or "disabled")
 end
