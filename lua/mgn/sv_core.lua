@@ -128,7 +128,7 @@ function mgn.ActivateAlert()
 	for i = 1, #lua_screens do
 		local lua_screen = lua_screens[i]
 		if lua_screen:GetPlace() == "elev" then
-			lua_screen:SetEmergency(false)
+			lua_screen:SetEmergency(true)
 		end
 	end
 
