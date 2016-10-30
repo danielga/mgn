@@ -5,7 +5,7 @@ mgn.AlarmEntities = mgn.AlarmEntities or {}
 
 mgn.LightEntities = mgn.LightEntities or {}
 
-function mgn.PopulateLuaScreens()
+hook.Add("PopulateLuaScreens", "MGN", function()
 	if game.GetMap() == "gm_construct_m_222" and LuaScreen then
 		LuaScreen.AddConfig({
 			place = "mgn_control_computer",
@@ -15,8 +15,7 @@ function mgn.PopulateLuaScreens()
 
 		LuaScreen.Precache("elev_mgn") -- must be loaded in both sides to prevent ID desync
 	end
-end
-hook.Add("PopulateLuaScreens", "MGN", mgn.PopulateLuaScreens)
+end)
 
 function mgn.Initialize()
 	for i = 1, math.max(#mgn.AlarmLocations, #mgn.AlarmEntities) do

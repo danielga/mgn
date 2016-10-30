@@ -1,21 +1,15 @@
 -- this file isn't called elev.lua, which should be initialized by metastruct code
 -- however, we can't be sure that, if this file was named elev.lua, it would override the original one
 -- the current way, we can be assured we can do so
--- it will be loaded on the PopulateLuaScreens hook, overriding elev.lua, which won't be loaded since the _loaded variable will be true
 
--- copy this LuaScreen code onto elev and mark it as loaded
+-- copy this LuaScreen code onto elev, overriding whatever is already there
 
 local _data = LuaScreen.getdata(LuaScreen.toid("elev"))
 if not _data then
-	ErrorNoHalt("[Luascreen] No data: elev\n")
+	ErrorNoHalt("[MGN] No LuaScreen data for \"elev\"\n")
 	return
 end
 
-if _data._loaded then
-	ErrorNoHalt("[Luascreen] Original elev LuaScreen was already loaded. Continuing...")
-end
-
-_data._loaded = true
 _data.merge = ENT -- elev and elev_mgn will share tables
 
 -- end of header, normal LuaScreen code after this line
