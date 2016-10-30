@@ -1,2 +1,2 @@
 AddCSLuaFile()
-include("mgn/core.lua")
+include("mgn/sh_core.lua")
