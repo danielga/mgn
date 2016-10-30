@@ -1,4 +1,4 @@
-local doorpos = LMVector(-2106, 5160, -110, "land_caves", true)
+local doorloc = LMVector(-2106, 5160, -110, "land_caves", true)
 local doorradius = 100
 local center = LMVector(-2083, 5142, -21, "land_caves", true)
 
@@ -11,7 +11,7 @@ if not center:inworld() then
 end
 
 local function door()
-	local doors = ents.FindInSphere(doorpos, doorradius)
+	local doors = ents.FindInSphere(doorloc:pos(), doorradius)
 	for i = 1, #doors do
 		local door = doors[i]
 		if door:GetClass() == "func_door" then
