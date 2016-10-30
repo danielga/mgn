@@ -5,7 +5,7 @@ mgn.AlarmEntities = mgn.AlarmEntities or {}
 
 mgn.LightEntities = mgn.LightEntities or {}
 
-hook.Add("PopulateLuaScreens", "MGN", function()
+hook.Add("PopulateLuaScreens", "mgn.PopulateLuaScreens", function()
 	if game.GetMap() == "gm_construct_m_222" and LuaScreen then
 		LuaScreen.AddConfig({
 			place = "mgn_control_computer",
@@ -111,7 +111,7 @@ function mgn.Initialize()
 
 	SetGlobalBool("MGN_AlertActive", false)
 end
-hook.Add("Initialize", "MGN", mgn.Initialize)
+hook.Add("Initialize", "mgn.Initialize", mgn.Initialize)
 
 function mgn.ActivateAlert()
 	for i = 1, #mgn.AlarmEntities do
