@@ -12,6 +12,8 @@ function mgn.PopulateLuaScreens()
 			pos = Vector(-13692, 2998, 14346),
 			ang = Angle(-45, 0, 0)
 		})
+
+		LuaScreen.Precache("elev_mgn") -- must be loaded in both sides to prevent ID desync
 	end
 end
 hook.Add("PopulateLuaScreens", "MGN", mgn.PopulateLuaScreens)
