@@ -35,11 +35,11 @@ end
 function ms.SetEmergencyTelevationMode(e)
 	e = e or e == nil
 
-	if (emergency_televation_mode and e) or (not emergency_televation_mode and not e) then
+	if (ms.emergency_televation_mode and e) or (not ms.emergency_televation_mode and not e) then
 		return
 	end
 
-	emergency_televation_mode = e
+	ms.emergency_televation_mode = e
 
 	local door = door()
 	if e then
@@ -52,7 +52,7 @@ function ms.SetEmergencyTelevationMode(e)
 
 	ms.TelevatorSetEmergency(e)
 
-	Print("EmergencyMode", e and "ENABLED" or "disabled")
+	ms.Print("EmergencyMode", e and "ENABLED" or "disabled")
 end
 
 local vec = Vector(0, 0, a.z)
