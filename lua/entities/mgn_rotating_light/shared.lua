@@ -11,13 +11,13 @@ ENT.m_tblToolsAllowed = {}
 
 function ENT:SetupDataTables()
 	self:NetworkVar("Bool", 0, "Enabled")
-	
+
 	if SERVER then
 		self:NetworkVarNotify("Enabled", function(ent, name, old, new)
 			if old == new then
 				return
 			end
-			
+
 			if new then
 				ent.Spotlight1:Fire("LightOn", "", 0)
 				ent.Spotlight2:Fire("LightOn", "", 0)

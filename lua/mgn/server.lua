@@ -213,6 +213,14 @@ function mgn.ActivateAlert()
 		mgn.LightEntities[i]:SetEnabled(true)
 	end
 
+	local lua_screens = ents.FindByClass("lua_screen")
+	for i = 1, #lua_screens do
+		local lua_screen = lua_screens[i]
+		if lua_screen:GetPlace() == "elev" then
+			lua_screen:SetEmergency(false)
+		end
+	end
+
 	SetGlobalBool("MGN_AlertActive", true)
 end
 
@@ -225,6 +233,14 @@ function mgn.DisableAlert()
 
 	for i = 1, #mgn.LightEntities do
 		mgn.LightEntities[i]:SetEnabled(false)
+	end
+
+	local lua_screens = ents.FindByClass("lua_screen")
+	for i = 1, #lua_screens do
+		local lua_screen = lua_screens[i]
+		if lua_screen:GetPlace() == "elev" then
+			lua_screen:SetEmergency(false)
+		end
 	end
 
 	SetGlobalBool("MGN_AlertActive", false)

@@ -31,7 +31,7 @@ end
 
 function ENT:OnRemove()
 	self:SetEnabled(false)
-	
+
 	local spotends = ents.FindByClass("spotlight_end")
 	for i = 1, #spotends do
 		local spotend = spotends[i]

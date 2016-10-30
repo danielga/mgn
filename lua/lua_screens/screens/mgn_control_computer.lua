@@ -24,9 +24,9 @@ local red = Color(255, 0, 0, 255)
 local green = Color(0, 255, 0, 255)
 function ENT:Draw3D2D(width, height)
 	self:DrawCenteredWordBox("CORE CONTROL PANEL", "Trebuchet24", width / 2, 30, white, red)
-	
+
 	self:DrawCenteredWordBox("SELF-DESTRUCT", "Trebuchet24", width / 2, 100, red, white)
-	
+
 	self:DrawCenteredWordBox("CANCEL", "Trebuchet24", width / 2, 150, green, white)
 
 	if self.Denied then
@@ -55,10 +55,10 @@ function ENT:OnMouseClick(keycode)
 
 	local w, h = self:GetWide(), self:GetTall()
 	local mx, my = self:MousePos()
-	
+
 	surface.SetFont("Trebuchet24")
 	local tw, th = surface.GetTextSize("SELF-DESTRUCT")
-	
+
 	if mx >= w / 2 - tw / 2 and mx <= w / 2 + tw / 2 and my >= 100 - th / 2 and my <= 100 + th / 2 then
 		self:CallOnServer(self.SELF_DESTRUCT)
 	elseif mx >= w / 2 - tw / 2 and mx <= w / 2 + tw / 2 and my >= 150 - th / 2 and my <= 150 + th / 2 then
