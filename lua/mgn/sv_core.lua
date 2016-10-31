@@ -1,3 +1,5 @@
+resource.AddWorkshop("790576613") -- vox audio files
+
 include("sv_locations.lua")
 include("sv_emergency.lua")
 
