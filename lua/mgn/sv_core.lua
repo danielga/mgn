@@ -20,7 +20,7 @@ hook.Add("PopulateLuaScreens", "mgn.PopulateLuaScreens", function()
 end)
 
 function mgn.SetAlertActive(b)
-	assert(type(b) == "bool", "Attempting to set activation status with a non-boolean.")
+	assert(type(b) == "boolean", "Attempting to set activation status with a non-boolean.")
 
 	for i = 1, #mgn.AlarmEntities do
 		local pair = mgn.AlarmEntities[i]
