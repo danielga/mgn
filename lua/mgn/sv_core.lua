@@ -1,14 +1,17 @@
 resource.AddWorkshop("790576613") -- vox audio files
 
-include("sv_locations.lua")
-include("sv_emergency.lua")
+AddCSLuaFile("sh_core.lua")
+AddCSLuaFile("cl_core.lua")
+
+include("sv_televators.lua") -- metastruct televators specific code
+include("sv_locations.lua") -- metastruct specific entity placements
 
 mgn.AlarmEntities = mgn.AlarmEntities or {}
 
 mgn.LightEntities = mgn.LightEntities or {}
 
 hook.Add("PopulateLuaScreens", "mgn.PopulateLuaScreens", function()
-	if game.GetMap() == "gm_construct_m_222" and LuaScreen then
+	if game.GetMap() == "gm_construct_m_222" then
 		LuaScreen.AddConfig({
 			place = "mgn_control_computer",
 			pos = Vector(-13692, 2998, 14346),
@@ -32,7 +35,7 @@ function mgn.SetAlertActive(b)
 		mgn.LightEntities[i]:SetEnabled(b)
 	end
 
-	ms.SetEmergencyTelevationMode(b)
+	mgn.SetEmergencyTelevationMode(b)
 
 	SetGlobalBool("MGN_AlertActive", b)
 end

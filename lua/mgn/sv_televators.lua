@@ -20,8 +20,17 @@ local function GetDoor()
 	end
 end
 
-function ms.TelevatorSetEmergency(e)
-	e = e or e == nil
+function mgn.SetEmergencyTelevationMode(e)
+	local door = GetDoor()
+	if door then
+		if e then
+			door:Fire("close")
+			door:Fire("lock")
+		else
+			door:Fire("unlock")
+			door:Fire("open")
+		end
+	end
 
 	local screens = ents.FindByClass("lua_screen")
 	for i = 1, #screens do
@@ -30,29 +39,6 @@ function ms.TelevatorSetEmergency(e)
 			screen:SetEmergency(e)
 		end
 	end
-end
-
-function ms.SetEmergencyTelevationMode(e)
-	e = e or e == nil
-
-	if (ms.emergency_televation_mode and e) or (not ms.emergency_televation_mode and not e) then
-		return
-	end
-
-	ms.emergency_televation_mode = e
-
-	local door = GetDoor()
-	if e then
-		door:Fire("close")
-		door:Fire("lock")
-	else
-		door:Fire("unlock")
-		door:Fire("open")
-	end
-
-	ms.TelevatorSetEmergency(e)
-
-	ms.Print("EmergencyMode", e and "ENABLED" or "disabled")
 end
 
 local vec = Vector(0, 0, a.z)
@@ -124,7 +110,7 @@ local function TelevateCoroutine(ply, scr, edat)
 	ply:ScreenFade(SCREENFADE.IN, white, 1, 1)
 end
 
-function ms.EmergencyTelevate(ply, ...)
+function mgn.EmergencyTelevate(ply, ...)
 	if ply.EmergencyTelevator and coroutine.status(ply.EmergencyTelevator) == "suspended" then
 		return
 	end
