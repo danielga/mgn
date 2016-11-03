@@ -1,3 +1,5 @@
+include("cl_vox.lua")
+
 surface.CreateFont("MGN_Alert", {
 	font = "Roboto",
 	size = 32,
