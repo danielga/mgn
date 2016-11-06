@@ -5,14 +5,12 @@ ENT.Scale  = 0.1
 ENT.SELF_DESTRUCT = 1
 ENT.CANCEL = 2
 
-function ENT:Initialize()
-	self:SetNWVarProxy("AlertStart", function(ent, name, old, new)
-		if old == new then
-			return
-		end
+function ENT:IsAlertActive()
+	return self:GetAlertStart() ~= 0
+end
 
-		mgn.SetAlertActive(new ~= 0, new)
-	end)
+function ENT:GetAlertStart()
+	return self:GetDTFloat(0)
 end
 
 if SERVER then
@@ -22,6 +20,11 @@ end
 ENT.Denied = false
 ENT.Granted = false
 ENT.HideMessageTime = 0
+ENT.AlertActive = false
+
+function ENT:Initialize()
+	mgn.ControlComputer = self
+end
 
 function ENT:DrawCenteredWordBox(text, font, x, y, bc, tc)
 	surface.SetFont(font)
@@ -51,6 +54,19 @@ function ENT:Think()
 		self.Denied = false
 		self.Granted = false
 	end
+
+	-- CLIENTSIDE HACK TIME
+
+	local alert_start = self:GetAlertStart()
+	if self.AlertActive and alert_start == 0 then
+		self.AlertActive = false
+		mgn.SetAlertActive(false)
+	elseif not self.AlertActive and alert_start ~= 0 then
+		self.AlertActive = true
+		mgn.SetAlertActive(true, alert_start)
+	end
+
+	-- END CLIENTSIDE HACK TIME
 end
 
 function ENT:OnMouseClick(keycode)

@@ -79,17 +79,21 @@ function mgn.SetAlertActive(b, t)
 		return
 	end
 
-	if not b and mgn.IsAlertActive() then
-		if mgn.Music then
-			mgn.Music:SetTime(CurTime() - mgn.GetAlertStart())
-			mgn.Music:Play()
-		end
-	elseif b and not mgn.IsAlertActive() then
+	local alert_start = t or CurTime()
+	if b and not mgn.IsAlertActive() then
+		sound.PlayFile("data/" .. mgn.MusicPath, "", function(channel, errID, errStr)
+			if channel then
+				mgn.Music = channel
+				mgn.Music:SetTime(CurTime() - alert_start)
+			end
+		end)
+	elseif not b and mgn.IsAlertActive() then
 		if mgn.Music then
 			mgn.Music:Stop()
+			mgn.Music = nil
 		end
 	end
 
 	mgn.AlertActive = b
-	mgn.AlertStart = b and (t or CurTime()) or 0
+	mgn.AlertStart = b and alert_start or 0
 end

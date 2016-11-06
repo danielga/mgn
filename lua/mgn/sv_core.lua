@@ -22,7 +22,7 @@ hook.Add("PopulateLuaScreens", "mgn.PopulateLuaScreens", function()
 	end
 end)
 
-function mgn.SetAlertActive(b, t)
+function mgn.SetAlertActive(b)
 	assert(type(b) == "boolean", "Attempting to set activation status with a non-boolean.")
 
 	if (b and mgn.IsAlertActive()) or (not b and not mgn.IsAlertActive()) then
@@ -42,7 +42,8 @@ function mgn.SetAlertActive(b, t)
 	mgn.SetEmergencyTelevationMode(b)
 
 	mgn.AlertActive = b
-	mgn.AlertStart = b and (t or CurTime()) or 0
+	mgn.AlertStart = b and CurTime() or 0
+	mgn.ControlComputer:SetAlertStart(mgn.AlertStart)
 end
 
 function mgn.Initialize()

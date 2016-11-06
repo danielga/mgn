@@ -11,22 +11,12 @@ function ENT:Initialize()
 	end
 
 	self:SetParent(monitor) -- in case we move around the monitor prop
-end
 
-function ENT:IsAlertActive()
-	return CurTime() - self:GetAlertStart() <= mgn.AlertLength
-end
-
-function ENT:SetAlertActive(b)
-	self:SetAlertStart(b and CurTime() or 0)
-end
-
-function ENT:GetAlertStart()
-	return self:GetNWFloat("AlertStart")
+	mgn.ControlComputer = self
 end
 
 function ENT:SetAlertStart(t)
-	self:SetNWFloat("AlertStart", t)
+	self:SetDTFloat(0, t)
 end
 
 function ENT:CallCMD(ply, cmd)
@@ -35,8 +25,8 @@ function ENT:CallCMD(ply, cmd)
 	end
 
 	if cmd == self.SELF_DESTRUCT and not self:IsAlertActive() then
-		self:SetAlertActive(true)
+		mgn.SetAlertActive(true)
 	elseif cmd == self.CANCEL and self:IsAlertActive() then
-		self:SetAlertActive(false)
+		mgn.SetAlertActive(false)
 	end
 end
