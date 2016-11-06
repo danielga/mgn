@@ -19,26 +19,15 @@ surface.CreateFont("MGN_Countdown", {
 mgn.MusicDownload = "https://files.metaman.xyz/mgn/sound/countdown_music.mp3"
 mgn.MusicPath = "mgn/sound/countdown_music.dat"
 
-local function InitializeMusic()
-	sound.PlayFile("data/" .. mgn.MusicPath, "noplay", function(channel, errID, errStr)
-		if channel then
-			mgn.Music = channel
-		end
-	end)
-end
-
 if not file.Exists(mgn.MusicPath, "DATA") then
 	http.Fetch(mgn.MusicDownload, function(body, size, headers, errCode)
 		if errCode == 200 then
 			file.Write(mgn.MusicPath, body)
-			InitializeMusic()
 			print("[MGN] Finished downloading music!", size)
 		end
 	end, function(errCode)
 		print("[MGN] Failed downloading music!", errCode)
 	end)
-else
-	InitializeMusic()
 end
 
 local function FormatTime(time)
@@ -70,6 +59,17 @@ hook.Add("HUDPaint", "mgn.HUDPaint", function()
 	end
 
 	draw.DrawText(FormatTime(time_left), "MGN_Countdown", ScrW() / 2, 30, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+end)
+
+hook.Add("Think", "mgn.Think", function()
+	if not mgn.IsAlertActive() or not mgn.Music then
+		return
+	end
+
+	local time_passed = CurTime() - mgn.GetAlertStart()
+	if time_passed < mgn.AlertLength and math.abs(time_passed - mgn.Music:GetTime()) >= 1 then
+		mgn.Music:SetTime(time_passed)
+	end
 end)
 
 function mgn.SetAlertActive(b, t)

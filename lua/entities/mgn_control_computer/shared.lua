@@ -14,7 +14,7 @@ function ENT:IsAlertActive()
 end
 
 function ENT:SetupDataTables()
-	self:NetworkVar("Bool", 0, "AlertStart")
+	self:NetworkVar("Float", 0, "AlertStart")
 
 	if CLIENT then
 		self:NetworkVarNotify("AlertStart", function(ent, name, old, new)

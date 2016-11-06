@@ -12,9 +12,9 @@ function ENT:CallCMD(ply, cmd)
 		return
 	end
 
-	if cmd == self.SELF_DESTRUCT and not self:IsAlertActive() then
+	if cmd == self.SELF_DESTRUCT and not mgn.IsAlertActive() then
 		mgn.SetAlertActive(true)
-	elseif cmd == self.CANCEL and self:IsAlertActive() then
+	elseif cmd == self.CANCEL and mgn.IsAlertActive() then
 		mgn.SetAlertActive(false)
 	end
 end
