@@ -6,7 +6,16 @@ local roomcenter = LMVector(-2083, 5142, -21, "land_caves", true)
 local a = LMVector(-1886, 4962, -174, "land_caves", true):pos()
 local b = LMVector(-2289, 5281, -174, "land_caves", true):pos()
 
+local PLAYER = FindMetaTable("Player")
+
 if not roomcenter:inworld() then
+	function mgn.SetEmergencyTelevationMode()
+	end
+
+	function PLAYER:EmergencyTelevate()
+	end
+
+	print("[MGN] Unable to find emergency televation destination!")
 	return
 end
 
@@ -110,10 +119,10 @@ local function TelevateCoroutine(ply, scr, edat)
 	ply:ScreenFade(SCREENFADE.IN, white, 1, 1)
 end
 
-function mgn.EmergencyTelevate(ply, ...)
-	if ply.EmergencyTelevator and coroutine.status(ply.EmergencyTelevator) == "suspended" then
+function PLAYER:EmergencyTelevate(screen, edat)
+	if self.EmergencyTelevator and coroutine.status(self.EmergencyTelevator) == "suspended" then
 		return
 	end
 
-	ply.EmergencyTelevator = co(TelevateCoroutine, ply, ...)
+	self.EmergencyTelevator = co(TelevateCoroutine, self, screen, edat)
 end

@@ -19,13 +19,15 @@ hook.Add("PopulateLuaScreens", "mgn.PopulateLuaScreens", function()
 			pos = Vector(-13692, 2998, 14346),
 			ang = Angle(-45, 0, 0)
 		})
-
-		LuaScreen.Precache("elev_mgn") -- must be loaded in both sides to prevent ID desync
 	end
 end)
 
 function mgn.SetAlertActive(b)
 	assert(type(b) == "boolean", "Attempting to set activation status with a non-boolean.")
+
+	if (b and mgn.IsAlertActive()) or (not b and not mgn.IsAlertActive()) then
+		return
+	end
 
 	for i = 1, #mgn.AlarmEntities do
 		local pair = mgn.AlarmEntities[i]
