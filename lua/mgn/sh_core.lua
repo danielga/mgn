@@ -6,8 +6,16 @@ else
 	include("cl_core.lua")
 end
 
+mgn.AlertLength = 206
+mgn.AlertActive = false
+mgn.AlertStart = 0
+
 function mgn.IsAlertActive()
-	return GetGlobalBool("MGN_AlertActive")
+	return mgn.AlertActive
+end
+
+function mgn.GetAlertStart()
+	return mgn.AlertStart
 end
 
 hook.Add("PlayerNoClip", "mgn.PlayerNoClip", function()

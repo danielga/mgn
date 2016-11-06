@@ -5,6 +5,16 @@ ENT.Scale  = 0.1
 ENT.SELF_DESTRUCT = 1
 ENT.CANCEL = 2
 
+function ENT:Initialize()
+	self:SetNWVarProxy("AlertStart", function(ent, name, old, new)
+		if old == new then
+			return
+		end
+
+		mgn.SetAlertActive(new ~= 0, new)
+	end)
+end
+
 if SERVER then
 	return
 end
