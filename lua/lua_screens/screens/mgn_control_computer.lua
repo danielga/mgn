@@ -43,16 +43,20 @@ function ENT:Think()
 	end
 end
 
-function ENT:OnMouseClick(keycode)
+function ENT:AttemptToCallOnServer(...)
 	self.HideMessageTime = CurTime() + 3
 
 	if not LocalPlayer():IsSuperAdmin() then
 		self.Denied = true
-		return
+		return false
 	end
 
 	self.Granted = true
+	self:CallOnServer(...)
+	return true
+end
 
+function ENT:OnMouseClick(keycode)
 	local w, h = self:GetWide(), self:GetTall()
 	local mx, my = self:MousePos()
 
@@ -60,8 +64,8 @@ function ENT:OnMouseClick(keycode)
 	local tw, th = surface.GetTextSize("SELF-DESTRUCT")
 
 	if mx >= w / 2 - tw / 2 and mx <= w / 2 + tw / 2 and my >= 100 - th / 2 and my <= 100 + th / 2 then
-		self:CallOnServer(self.SELF_DESTRUCT)
+		self:AttemptToCallOnServer(self.SELF_DESTRUCT)
 	elseif mx >= w / 2 - tw / 2 and mx <= w / 2 + tw / 2 and my >= 150 - th / 2 and my <= 150 + th / 2 then
-		self:CallOnServer(self.CANCEL)
+		self:AttemptToCallOnServer(self.CANCEL)
 	end
 end
