@@ -18,16 +18,31 @@ surface.CreateFont("MGN_Countdown", {
 
 mgn.MusicDownload = "https://files.metaman.xyz/mgn/sound/countdown_music.mp3"
 mgn.MusicPath = "mgn/sound/countdown_music.dat"
+mgn.ETagPath = "mgn/sound/countdown_music.txt"
 
-if not file.Exists(mgn.MusicPath, "DATA") then
-	http.Fetch(mgn.MusicDownload, function(body, size, headers, errCode)
-		if errCode == 200 then
-			file.Write(mgn.MusicPath, body)
-			print("[MGN] Finished downloading music!", size)
+do
+	local etag = file.Read(mgn.ETagPath, "DATA")
+	if etag == "" or not file.Exists(mgn.MusicPath, "DATA") then
+		etag = nil
+	end
+
+	HTTP({
+		method = "get",
+		url = mgn.MusicDownload,
+		headers = {["If-None-Match"] = etag},
+		success = function(code, body, headers)
+			if code == 200 then
+				file.Write(mgn.MusicPath, body)
+				file.Write(mgn.ETagPath, headers.ETag)
+				print("[MGN] Finished downloading music!", size)
+			elseif code == 304 then
+				print("[MGN] Music ETag is good!")
+			end
+		end,
+		failed = function(reason)
+			print("[MGN] Failed downloading music!", reason)
 		end
-	end, function(errCode)
-		print("[MGN] Failed downloading music!", errCode)
-	end)
+	})
 end
 
 local function FormatTime(time)
