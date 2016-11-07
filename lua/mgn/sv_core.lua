@@ -22,6 +22,16 @@ hook.Add("PopulateLuaScreens", "mgn.PopulateLuaScreens", function()
 	end
 end)
 
+local function GetCoreInfoScreen()
+	local screens = ents.FindByClass("lua_screen")
+	for i = 1, #screens do
+		local screen = screens[i]
+		if screen:GetPlace() == "corectrl" then
+			return screen
+		end
+	end
+end
+
 function mgn.SetAlertActive(b)
 	assert(type(b) == "boolean", "Attempting to set activation status with a non-boolean.")
 
@@ -40,6 +50,13 @@ function mgn.SetAlertActive(b)
 	end
 
 	mgn.SetEmergencyTelevationMode(b)
+
+	local screen = GetCoreInfoScreen()
+	if IsValid(screen) then
+		screen:SetDTInt(3, b and 100 or 0) -- damage status
+		screen:SetDTInt(4, b and -1 or 0) -- radiation status
+		SetGlobalBool("core_door", not b) -- door status
+	end
 
 	mgn.AlertActive = b
 	mgn.AlertStart = b and CurTime() or 0
