@@ -4,14 +4,14 @@ file.CreateDir("mgn/sound")
 
 surface.CreateFont("MGN_Alert", {
 	font = "Roboto",
-	size = 32,
+	size = ScreenScale(12),
 	outline = true,
 	antialias = false
 })
 
 surface.CreateFont("MGN_Countdown", {
 	font = "Roboto",
-	size = 128,
+	size = ScreenScale(42),
 	outline = true,
 	antialias = false
 })
@@ -61,7 +61,7 @@ hook.Add("HUDPaint", "mgn.HUDPaint", function()
 		return
 	end
 
-	draw.SimpleText("████ ████████ IMMINENT! PLEASE EVACUATE THROUGH THE NEAREST EXIT!", "MGN_Alert", ScrW() / 2, 10, red, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+	draw.SimpleText("████ ████████ IMMINENT! PLEASE EVACUATE THROUGH THE NEAREST EXIT!", "MGN_Alert", ScrW() * 0.5, ScrH() * 0.009, red, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 
 	local time_left = mgn.AlertLength - (CurTime() - mgn.GetAlertStart())
 	if time_left <= 0 then
@@ -73,7 +73,7 @@ hook.Add("HUDPaint", "mgn.HUDPaint", function()
 		color = red
 	end
 
-	draw.DrawText(FormatTime(time_left), "MGN_Countdown", ScrW() / 2, 30, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+	draw.DrawText(FormatTime(time_left), "MGN_Countdown", ScrW() * 0.5, ScrH() * 0.028, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 end)
 
 hook.Add("Think", "mgn.Think", function()
