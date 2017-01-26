@@ -13,12 +13,15 @@ mgn.AlarmEntities = mgn.AlarmEntities or {}
 mgn.LightEntities = mgn.LightEntities or {}
 
 hook.Add("PopulateLuaScreens", "mgn.PopulateLuaScreens", function()
-	if game.GetMap() == "gm_construct_m_222" then
-		LuaScreen.AddConfig({
-			place = "mgn_control_computer",
-			pos = Vector(-13692, 2998, 14346),
-			ang = Angle(-45, 0, 0)
-		})
+	if LMVector then
+		local reactor = LMVector(948, 6, -538, "reactor", true)
+		if reactor:inworld() then
+			LuaScreen.AddConfig({
+				place = "mgn_control_computer",
+				pos = reactor:pos(),
+				ang = Angle(-45, 0, 0)
+			})
+		end
 	end
 end)
 
