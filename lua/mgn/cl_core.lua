@@ -34,7 +34,7 @@ do
 			if code == 200 then
 				file.Write(mgn.MusicPath, body)
 				file.Write(mgn.ETagPath, headers.ETag)
-				print("[MGN] Finished downloading music!", size)
+				print("[MGN] Finished downloading music!", #body)
 			elseif code == 304 then
 				print("[MGN] Music ETag is good!")
 			end
