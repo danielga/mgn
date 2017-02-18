@@ -71,10 +71,10 @@ local sounds = {
 	citadelpan = { path = "ambient/intro/citadelpan.wav", played = false },
 	debris = { path = "ambient/intro/debris02.wav", played = false },
 }
-local function playSoundOnce(sound)
-	if not sounds[sound].played then
-		surface.PlaySound(sounds[sound].path)
-		sounds[sound].played = true
+local function playSoundOnce(snd)
+	if not sounds[snd].played then
+		surface.PlaySound(sounds[snd].path)
+		sounds[snd].played = true
 	end
 end
 
@@ -83,6 +83,9 @@ hook.Add("RenderScreenspaceEffects", "mgn.ExplosionEffect", function()
 		startTime = 0
 		endTime = 0
 		alpha = 0
+		for sndName, data in next, sounds do
+			data.played = false
+		end
 		mgn.ExplosionReset = false
 	end
 	if not mgn.IsAlertActive() then return end
