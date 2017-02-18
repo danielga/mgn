@@ -100,7 +100,7 @@ hook.Add("RenderScreenspaceEffects", "mgn.ExplosionEffect", function()
 	if RealTime() < endTime then
 		alpha = math.Clamp(alpha + FrameTime() * 3, 0, 1)
 		if alpha == 1 then
-			util.ScreenShake(LocalPlayer():GetPos(), 3, 3, 0.25, 512)
+			util.ScreenShake(LocalPlayer():GetPos(), 5, 3, 0.25, 512)
 			playSoundOnce("citadelpan")
 			timer.Simple(6, function() playSoundOnce("debris") end)
 		end
@@ -111,11 +111,11 @@ hook.Add("RenderScreenspaceEffects", "mgn.ExplosionEffect", function()
 		hook.Remove("RenderScreenspaceEffects", "mgn")
 	end
 	DrawColorModify({
-		["$pp_colour_brightness"] = Lerp(alpha, 0, 0.566),
+		["$pp_colour_brightness"] = 0.566 * alpha,
 		["$pp_colour_contrast"] = 1,
-		["$pp_colour_colour"] = Lerp(alpha, 1, 0.34),
-		["$pp_colour_mulr"] = Lerp(alpha, 0, 80),
-		["$pp_colour_mulg"] = Lerp(alpha, 1, 112),
+		["$pp_colour_colour"] = 1 - (0.66 * alpha),
+		["$pp_colour_mulr"] = 80 * alpha,
+		["$pp_colour_mulg"] = 112 * alpha,
 		["$pp_colour_mulb"] = 0,
 	})
 	DrawBloom(0.65, 4 * alpha, 4, 4, 1, 1, 1, 1, 1)
