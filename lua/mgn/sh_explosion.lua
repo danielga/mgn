@@ -1,4 +1,3 @@
-
 local VectorWithinBox = function(self, mins, maxs) -- WithinAABox didn't work for me.
 	if self.x < math.max(mins.x, maxs.x) and self.x > math.min(mins.x, maxs.x) and
 		self.y < math.max(mins.y, maxs.y) and self.y > math.min(mins.y, maxs.y) and
@@ -19,7 +18,8 @@ mgn.ExplosionStart = 0
 hook.Add("Think", "mgn.Explosion", function()
 	if not mgn.IsAlertActive() then return end
 	if CurTime() < mgn.AlertStart + mgn.AlertLength then return end
-	if not mgn.Exploded then
+
+	if not mgn.Exploded then -- initialize the explosion
 		mgn.ExplosionStart = CurTime() + 6
 		mgn.ExplosionActive = true
 		timer.Simple(18, function()
@@ -30,11 +30,13 @@ hook.Add("Think", "mgn.Explosion", function()
 		end)
 		mgn.Exploded = true
 	end
+
+	-- rape the shit out of players every 0.5 secs
 	if mgn.ExplosionActive and mgn.ExplosionStart < CurTime() then
 		if mgn.ExplosionLastTick < CurTime() then
 			for _, ply in next, player.GetAll() do
 				-- are we in the emergency room?
-				if VectorWithinBox(ply:GetPos(), Vector(8630, 4314, -15084), Vector(9087, 4767, -15506)) then continue end
+				if VectorWithinBox(ply:GetPos(), Vector(6710, 6957, -15535), Vector(10961, 4307, -14529)) then continue end
 
 				-- if not, blow shit up!
 				ply.__mgnIgnoreGod = true
@@ -79,7 +81,7 @@ local function playSoundOnce(snd)
 end
 
 hook.Add("RenderScreenspaceEffects", "mgn.ExplosionEffect", function()
-	if mgn.ExplosionReset then
+	if mgn.ExplosionReset then -- reset vars if some sicko wants to nuke more people
 		startTime = 0
 		endTime = 0
 		alpha = 0
@@ -88,6 +90,7 @@ hook.Add("RenderScreenspaceEffects", "mgn.ExplosionEffect", function()
 		end
 		mgn.ExplosionReset = false
 	end
+
 	if not mgn.IsAlertActive() then return end
 	if CurTime() < mgn.AlertStart + mgn.AlertLength then return end
 
@@ -96,20 +99,19 @@ hook.Add("RenderScreenspaceEffects", "mgn.ExplosionEffect", function()
 		endTime = RealTime() + 6 + 8
 		playSoundOnce("explosion")
 	end
-	if RealTime() < startTime then return end
-	if RealTime() < endTime then
+	if RealTime() < startTime then return end -- don't do anything until the explosion starts
+
+	if RealTime() < endTime then -- expand explosion
 		alpha = math.Clamp(alpha + FrameTime() * 3, 0, 1)
+		util.ScreenShake(LocalPlayer():GetPos(), 5, 3, 0.25, 512)
 		if alpha == 1 then
-			util.ScreenShake(LocalPlayer():GetPos(), 5, 3, 0.25, 512)
 			playSoundOnce("citadelpan")
 			timer.Simple(4, function() playSoundOnce("debris") end)
 		end
-	else
+	else -- end explosion
 		alpha = math.Clamp(alpha - FrameTime() * 0.175, 0, 1)
 	end
-	if alpha <= 0 then
-		hook.Remove("RenderScreenspaceEffects", "mgn")
-	end
+
 	DrawColorModify({
 		["$pp_colour_brightness"] = 0.566 * alpha,
 		["$pp_colour_contrast"] = 1,
@@ -123,7 +125,7 @@ hook.Add("RenderScreenspaceEffects", "mgn.ExplosionEffect", function()
 	surface.SetDrawColor(Color(255, 192, 0, 164 * alpha))
 	surface.DrawRect(0, 0, ScrW(), ScrH())
 
-	for i = 1, 512 do
+	for i = 1, 500 do -- some kind of noise, wish I could do this better
 		local randX = math.random(0, ScrW())
 		local randY = math.random(0, ScrH())
 		surface.SetDrawColor(Color(127, math.random(0, 127), 0, alpha * 192))

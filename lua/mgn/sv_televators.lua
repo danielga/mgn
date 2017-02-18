@@ -1,5 +1,5 @@
 local doorloc = LMVector(-2091, 4912, -70, "land_caves", true)
-local doorradius = 512
+local doorradius = 100
 local roomcenter = LMVector(-2083, 5142, -21, "land_caves", true)
 
 -- land position for emergency teleport target
