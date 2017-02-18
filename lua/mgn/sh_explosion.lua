@@ -22,7 +22,7 @@ hook.Add("Think", "mgn.Explosion", function()
 	if not mgn.Exploded then
 		mgn.ExplosionStart = CurTime() + 6
 		mgn.ExplosionActive = true
-		timer.Simple(16, function()
+		timer.Simple(18, function()
 			mgn.ExplosionActive = false
 			timer.Simple(4, function()
 				mgn.SetAlertActive(false)
@@ -102,7 +102,7 @@ hook.Add("RenderScreenspaceEffects", "mgn.ExplosionEffect", function()
 		if alpha == 1 then
 			util.ScreenShake(LocalPlayer():GetPos(), 5, 3, 0.25, 512)
 			playSoundOnce("citadelpan")
-			timer.Simple(6, function() playSoundOnce("debris") end)
+			timer.Simple(4, function() playSoundOnce("debris") end)
 		end
 	else
 		alpha = math.Clamp(alpha - FrameTime() * 0.175, 0, 1)
