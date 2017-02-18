@@ -62,12 +62,12 @@ hook.Add("HUDPaint", "mgn.HUDPaint", function()
 		return
 	end
 
-	draw.SimpleTextOutlined("████ ████████ IMMINENT! PLEASE EVACUATE THROUGH THE NEAREST EXIT!", "MGN_Alert", ScrW() * 0.5, ScrH() * 0.009, red, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, Color(0, 0, 0, 127))
-
 	local time_left = mgn.AlertLength - (CurTime() - mgn.GetAlertStart())
 	if time_left <= 0 then
 		return
 	end
+
+	draw.SimpleTextOutlined("████ ████████ IMMINENT! PLEASE EVACUATE THROUGH THE NEAREST EXIT!", "MGN_Alert", ScrW() * 0.5, ScrH() * 0.009, red, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, Color(0, 0, 0, 127))
 
 	local color = white
 	if time_left <= 30 then
@@ -110,7 +110,11 @@ function mgn.SetAlertActive(b, t)
 		end
 	end
 
-	mgn.VOX("emergency announcement please evacuate through the nearest exit")
+	mgn.ExplosionReset = true
+
+	if b then
+		mgn.VOX("emergency announcement please evacuate through the nearest exit")
+	end
 	mgn.AlertActive = b
 	mgn.AlertStart = b and alert_start or 0
 end
