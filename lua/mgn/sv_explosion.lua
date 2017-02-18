@@ -45,7 +45,7 @@ hook.Add("Think", "mgn.Explosion", function()
 				local ply = plys[i]
 				-- are we in the emergency room?
 				-- fix this with landmarks
-				if VectorWithinBox(ply:GetPos(), Vector(6710, 6957, -15535), Vector(10961, 4307, -14529) then
+				if VectorWithinBox(ply:GetPos(), Vector(6710, 6957, -15535), Vector(10961, 4307, -14529)) then
 					continue
 				end
 
