@@ -5,7 +5,6 @@ if SERVER then
 else
 	include("cl_core.lua")
 end
-include("sh_explosion.lua")
 
 mgn.AlertLength = 206
 mgn.AlertActive = false

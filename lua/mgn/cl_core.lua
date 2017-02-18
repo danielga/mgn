@@ -1,4 +1,5 @@
 include("cl_vox.lua")
+include("cl_explosion.lua")
 
 file.CreateDir("mgn/sound")
 
@@ -88,22 +89,22 @@ hook.Add("Think", "mgn.Think", function()
 	end
 end)
 
-function mgn.SetAlertActive(b, t)
-	assert(type(b) == "boolean", "Attempting to set activation status with a non-boolean.")
+function mgn.SetAlertActive(activate, start)
+	assert(type(activate) == "boolean", "Attempting to set activation status with a non-boolean.")
 
-	if (b and mgn.IsAlertActive()) or (not b and not mgn.IsAlertActive()) then
+	if (activate and mgn.IsAlertActive()) or (not activate and not mgn.IsAlertActive()) then
 		return
 	end
 
-	local alert_start = t or CurTime()
-	if b and not mgn.IsAlertActive() then
+	local alert_start = start or CurTime()
+	if activate and not mgn.IsAlertActive() then
 		sound.PlayFile("data/" .. mgn.MusicPath, "", function(channel, errID, errStr)
 			if channel then
 				mgn.Music = channel
 				mgn.Music:SetTime(CurTime() - alert_start)
 			end
 		end)
-	elseif not b and mgn.IsAlertActive() then
+	elseif not activate and mgn.IsAlertActive() then
 		if mgn.Music then
 			mgn.Music:Stop()
 			mgn.Music = nil
@@ -112,9 +113,10 @@ function mgn.SetAlertActive(b, t)
 
 	mgn.ExplosionReset = true
 
-	if b then
-		mgn.VOX("emergency announcement please evacuate through the nearest exit")
+	if activate then
+		mgn.VOX("emergency announcement, please evacuate through the nearest exit")
 	end
-	mgn.AlertActive = b
-	mgn.AlertStart = b and alert_start or 0
+
+	mgn.AlertActive = activate
+	mgn.AlertStart = activate and alert_start or 0
 end

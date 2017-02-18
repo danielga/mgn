@@ -1,11 +1,12 @@
 resource.AddWorkshop("790576613") -- vox audio files
 
 AddCSLuaFile("sh_core.lua")
-AddCSLuaFile("sh_explosion.lua")
+AddCSLuaFile("cl_explosion.lua")
 AddCSLuaFile("cl_core.lua")
 AddCSLuaFile("cl_vox.lua")
 AddCSLuaFile("cl_voxlist.lua")
 
+include("sv_explosion.lua")
 include("sv_televators.lua") -- metastruct televators specific code
 include("sv_locations.lua") -- metastruct specific entity placements
 
