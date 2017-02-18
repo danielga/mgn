@@ -1,6 +1,7 @@
 resource.AddWorkshop("790576613") -- vox audio files
 
 AddCSLuaFile("sh_core.lua")
+AddCSLuaFile("sh_explosion.lua")
 AddCSLuaFile("cl_core.lua")
 AddCSLuaFile("cl_vox.lua")
 AddCSLuaFile("cl_voxlist.lua")
@@ -60,6 +61,11 @@ function mgn.SetAlertActive(b)
 		screen:SetDTInt(4, b and -1 or 0) -- radiation status
 		SetGlobalBool("core_door", not b) -- door status
 	end
+
+	mgn.Exploded = false
+	mgn.ExplosionActive = false
+	mgn.ExplosionLastTick = 0
+	mgn.ExplosionStart = 0
 
 	mgn.AlertActive = b
 	mgn.AlertStart = b and CurTime() or 0
