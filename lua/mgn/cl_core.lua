@@ -3,17 +3,18 @@ include("cl_vox.lua")
 file.CreateDir("mgn/sound")
 
 surface.CreateFont("MGN_Alert", {
-	font = "Roboto",
+	font = "Arial Black",
 	size = ScreenScale(12),
-	outline = true,
-	antialias = false
+	outline = false,
+	weight = 0,
+	antialias = true
 })
 
 surface.CreateFont("MGN_Countdown", {
-	font = "Roboto",
+	font = "Roboto Bk",
 	size = ScreenScale(42),
-	outline = true,
-	antialias = false
+	outline = false,
+	antialias = true
 })
 
 mgn.MusicDownload = "https://files.metaman.xyz/mgn/sound/countdown_music.mp3"
@@ -61,19 +62,19 @@ hook.Add("HUDPaint", "mgn.HUDPaint", function()
 		return
 	end
 
-	draw.SimpleText("████ ████████ IMMINENT! PLEASE EVACUATE THROUGH THE NEAREST EXIT!", "MGN_Alert", ScrW() * 0.5, ScrH() * 0.009, red, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-
 	local time_left = mgn.AlertLength - (CurTime() - mgn.GetAlertStart())
 	if time_left <= 0 then
 		return
 	end
+
+	draw.SimpleTextOutlined("████ ████████ IMMINENT! PLEASE EVACUATE THROUGH THE NEAREST EXIT!", "MGN_Alert", ScrW() * 0.5, ScrH() * 0.009, red, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, Color(0, 0, 0, 127))
 
 	local color = white
 	if time_left <= 30 then
 		color = red
 	end
 
-	draw.DrawText(FormatTime(time_left), "MGN_Countdown", ScrW() * 0.5, ScrH() * 0.028, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+	draw.SimpleTextOutlined(FormatTime(time_left), "MGN_Countdown", ScrW() * 0.5, ScrH() * 0.028, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 4, Color(0, 0, 0, 127))
 end)
 
 hook.Add("Think", "mgn.Think", function()
@@ -109,6 +110,11 @@ function mgn.SetAlertActive(b, t)
 		end
 	end
 
+	mgn.ExplosionReset = true
+
+	if b then
+		mgn.VOX("emergency announcement please evacuate through the nearest exit")
+	end
 	mgn.AlertActive = b
 	mgn.AlertStart = b and alert_start or 0
 end
