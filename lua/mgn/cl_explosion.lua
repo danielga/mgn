@@ -24,8 +24,8 @@ hook.Add("RenderScreenspaceEffects", "mgn.ExplosionEffect", function()
 		end_time = 0
 		alpha = 0
 
-		for name, data in next, sounds do
-			sounds[name].Played = false
+		for _, data in pairs(sounds) do
+			data.Played = false
 		end
 	end
 
