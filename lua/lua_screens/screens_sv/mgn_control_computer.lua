@@ -13,8 +13,10 @@ function ENT:CallCMD(ply, cmd)
 	end
 
 	if cmd == self.SELF_DESTRUCT and not mgn.IsAlertActive() then
+		print("[MGN] Player " .. ply:Nick() .. " (" .. ply:SteamID64() .. ") activated self-destruct.")
 		mgn.SetAlertActive(true)
 	elseif cmd == self.CANCEL and mgn.IsAlertActive() then
+		print("[MGN] Player " .. ply:Nick() .. " (" .. ply:SteamID64() .. ") deactivated self-destruct.")
 		mgn.SetAlertActive(false)
 	end
 end
