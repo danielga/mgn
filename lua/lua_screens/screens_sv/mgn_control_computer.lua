@@ -13,10 +13,10 @@ function ENT:CallCMD(ply, cmd)
 	end
 
 	if cmd == self.SELF_DESTRUCT and not mgn.IsAlertActive() then
-		print("[MGN] Player " .. ply:Nick() .. " (" .. ply:SteamID64() .. ") activated self-destruct.")
+		MsgC(Color(255, 0, 0, 255), "[MGN] Player " .. ply:Nick() .. " (" .. ply:SteamID64() .. ") activated self-destruct.\n")
 		mgn.SetAlertActive(true)
 	elseif cmd == self.CANCEL and mgn.IsAlertActive() then
-		print("[MGN] Player " .. ply:Nick() .. " (" .. ply:SteamID64() .. ") deactivated self-destruct.")
+		MsgC(Color(0, 255, 0, 255), "[MGN] Player " .. ply:Nick() .. " (" .. ply:SteamID64() .. ") deactivated self-destruct.\n")
 		mgn.SetAlertActive(false)
 	end
 end
