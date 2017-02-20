@@ -18,8 +18,8 @@ function mgn.GetAlertStart()
 	return mgn.AlertStart
 end
 
-hook.Add("PlayerNoClip", "mgn.PlayerNoClip", function()
-	if mgn.IsAlertActive() then
+hook.Add("PlayerNoClip", "mgn.PlayerNoClip", function(ply)
+	if mgn.IsAlertActive() and ply:GetMoveType() ~= MOVETYPE_NOCLIP then
 		return false
 	end
 end)
