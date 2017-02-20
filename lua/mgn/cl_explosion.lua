@@ -54,14 +54,14 @@ hook.Add("RenderScreenspaceEffects", "mgn.ExplosionEffect", function()
 
 		if alpha == 1 then
 			PlaySoundOnce("citadelpan")
-			timer.Simple(4, function() PlaySoundOnce("debris") end)
+			timer.Simple(6, function() PlaySoundOnce("debris") end)
 		end
 	else -- end explosion
 		alpha = math.Clamp(alpha - FrameTime() * 0.175, 0, 1)
 	end
 
 	DrawColorModify({
-		["$pp_colour_brightness"] = 0.566 * alpha,
+		["$pp_colour_brightness"] = 0.5 * alpha,
 		["$pp_colour_contrast"] = 1,
 		["$pp_colour_colour"] = 1 - (0.66 * alpha),
 		["$pp_colour_mulr"] = 80 * alpha,
@@ -70,16 +70,16 @@ hook.Add("RenderScreenspaceEffects", "mgn.ExplosionEffect", function()
 	})
 
 	DrawBloom(0.65, 4 * alpha, 4, 4, 1, 1, 1, 1, 1)
+	DrawMotionBlur(0.1, 0.79 * alpha, 0.033)
 
 	surface.SetDrawColor(Color(255, 192, 0, 164 * alpha))
 	surface.DrawRect(0, 0, ScrW(), ScrH())
 
-	for i = 1, 500 do -- some kind of noise, wish I could do this better
+	for i = 1, ScrW() * 1.5 do -- some kind of noise, wish I could do this better
 		local randX = math.random(0, ScrW())
 		local randY = math.random(0, ScrH())
-		surface.SetDrawColor(Color(127, math.random(0, 127), 0, alpha * 192))
-		local size = math.random(1, 3)
-		surface.DrawRect(randX - size / 2, randY - size / 2, size, size)
+		surface.SetDrawColor(Color(0, 0, 0, alpha * math.random(192, 255)))
+		surface.DrawRect(randX, randY, math.random(1, 2), math.random(1, 2))
 	end
 
 	surface.SetDrawColor(Color(0, 0, 0, 48 * alpha))
