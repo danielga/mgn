@@ -39,9 +39,18 @@ function mgn.InterruptOverload()
 		return
 	end
 
+	local curtime = CurTime()
+	for _, stage in pairs(mgn.Stage) do
+		if stage.End then
+			stage:End(curtime)
+		end
+		
+		stage.Started = false
+	end
+
 	mgn.OverloadStage = mgn.Stage.Idle
 	mgn.OverloadStart = 0
-	mgn.ControlComputer:SetAlertStart(mgn.OverloadStart)
+	mgn.ControlComputer:SetOverloadStart(mgn.OverloadStart)
 end
 
 function mgn.Initialize()

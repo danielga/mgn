@@ -42,7 +42,5 @@ mgn.Stage.Overloading = {
 	end,
 	Think = function(self, chrono)
 		return chrono < 206
-	end,
-	End = function(self, time)
 	end
 }

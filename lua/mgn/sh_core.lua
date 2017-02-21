@@ -29,7 +29,8 @@ end)
 
 hook.Add("Think", "mgn.StageLogic", function()
 	local stage = mgn.GetOverloadStage()
-	if stage == mgn.Stage.Idle then
+	-- This stage is permanent since it can't tell us when it ends
+	if not stage.Think then
 		return
 	end
 
