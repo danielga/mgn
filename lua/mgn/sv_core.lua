@@ -145,6 +145,6 @@ function mgn.Initialize()
 		end
 	end
 
-	mgn.SetAlertActive(false)
+	mgn.InterruptOverload(false)
 end
 hook.Add("Initialize", "mgn.Initialize", mgn.Initialize)
