@@ -50,13 +50,12 @@ mgn.Stage.Intro = {
 		if mgn.IntroMusic then
 			if localplayer:IsInZone("reactor") and not overloading then
 				overloading = true
-				intro_volume = math.min(intro_volume + FrameTime() * 0.5, 0.7)
-				mgn.IntroMusic:SetVolume(intro_volume)
 			elseif not localplayer:IsInZone("reactor") and overloading then
 				overloading = false
-				intro_volume = math.max(intro_volume - FrameTime() * 0.5, 0)
-				mgn.IntroMusic:SetVolume(intro_volume)
 			end
+
+			intro_volume = math.Clamp(intro_volume + FrameTime() * (overloading and 0.5 or -0.5), 0, 0.7)
+			mgn.IntroMusic:SetVolume(intro_volume)
 		end
 
 		return chrono < 60
