@@ -27,11 +27,13 @@ hook.Add("Think", "mgn.Explosion", function()
 	if not mgn.Exploded then -- initialize the explosion
 		mgn.ExplosionStart = curtime + 6
 		mgn.ExplosionActive = true
+
+		mgn.ControlComputer:SetDTFloat(1, 0)
+		ms.core_effect:SetDTBool(3, true)
+
 		timer.Simple(18, function()
 			mgn.ExplosionActive = false
 			timer.Simple(4, function()
-				mgn.ControlComputer:SetDTFloat(1, 0)
-				ms.core_effect:SetDTBool(3, true)
 				mgn.SetAlertActive(false)
 			end)
 		end)
