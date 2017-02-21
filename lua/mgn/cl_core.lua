@@ -106,6 +106,7 @@ end)
 local goingToOverload = false
 local introVolume = 0
 local introLoading = false
+local core
 hook.Add("Think", "mgn.Think", function()
 	-- CLIENTSIDE HACK TIME
 
@@ -121,8 +122,9 @@ hook.Add("Think", "mgn.Think", function()
 
 	-- END CLIENTSIDE HACK TIME
 
+	core = core or ents.FindByClass("lua_core_effect")[1]
 	introVolume = Lerp(FrameTime(), introVolume, goingToOverload and 0.7 or 0)
-	if mgn.ControlComputer and mgn.ControlComputer:GetBoostLevel() >= 0.9 and not mgn.IsAlertActive() then
+	if mgn.ControlComputer and mgn.ControlComputer:GetBoostLevel() >= 0.9 and not mgn.IsAlertActive() and not core:GetDTBool(3) then
 		if not mgn.IntroMusic then
 			if not introLoading then
 				introLoading = true
