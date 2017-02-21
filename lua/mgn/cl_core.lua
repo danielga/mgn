@@ -124,7 +124,7 @@ hook.Add("Think", "mgn.Think", function()
 
 	core = core or ents.FindByClass("lua_core_effect")[1]
 	introVolume = Lerp(FrameTime(), introVolume, goingToOverload and 0.7 or 0)
-	if mgn.ControlComputer and mgn.ControlComputer:GetBoostLevel() >= 0.9 and not mgn.IsAlertActive() and not core:GetDTBool(3) then
+	if mgn.ControlComputer and mgn.ControlComputer:GetBoostLevel() >= 0.9 and not mgn.IsAlertActive() and (core and not core:GetDTBool(3)) then
 		if not mgn.IntroMusic then
 			if not introLoading then
 				introLoading = true
