@@ -28,9 +28,6 @@ hook.Add("Think", "mgn.Explosion", function()
 		mgn.ExplosionStart = curtime + 6
 		mgn.ExplosionActive = true
 
-		mgn.ControlComputer:SetDTFloat(1, 0)
-		ms.core_effect:SetDTBool(3, true)
-
 		timer.Simple(18, function()
 			mgn.ExplosionActive = false
 			timer.Simple(4, function()
@@ -43,6 +40,10 @@ hook.Add("Think", "mgn.Explosion", function()
 
 	-- rape the shit out of players every 0.5 secs
 	if mgn.ExplosionActive and mgn.ExplosionStart < curtime then
+		if not mgn.core_effect:GetDTBool(3) then
+			mgn.ControlComputer:SetDTFloat(1, 0)
+			ms.core_effect:SetDTBool(3, true)
+		end
 		if mgn.ExplosionLastTick < curtime then
 			local plys = player.GetAll()
 			for i = 1, #plys do
