@@ -91,7 +91,7 @@ mgn.Stage.Overloading = {
 	-- Countdown music resyncing
 	Think = function(self, chrono)
 		if mgn.CountdownMusic then
-			if chrono < mgn.AlertLength and math.abs(chrono - mgn.CountdownMusic:GetTime()) >= 1 then
+			if math.abs(chrono - mgn.CountdownMusic:GetTime()) >= 1 then
 				mgn.CountdownMusic:SetTime(chrono)
 			end
 		end
