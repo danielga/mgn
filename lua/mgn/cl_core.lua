@@ -86,7 +86,7 @@ hook.Add("Think", "mgn.Think", function()
 		local system_active = mgn.IsAlertActive()
 		if not alert_active and system_active then
 			mgn.SetAlertActive(false)
-		elseif not alert_active and not system_active then
+		elseif alert_active and not system_active then
 			mgn.SetAlertActive(true, mgn.ControlComputer:GetAlertStart())
 		end
 	end
