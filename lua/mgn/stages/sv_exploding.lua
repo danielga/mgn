@@ -16,6 +16,15 @@ local function GetCoreInfoScreen()
 	return core_info_screen
 end
 
+local core_effect
+local function GetCoreEffect()
+	if not IsValid(core_effect) then
+		core_effect = ents.FindByClass("lua_core_effect")[1]
+	end
+
+	return core_effect
+end
+
 -- find out if WithinAABox works and substitute with it if possible - less homemade pasta
 local function VectorWithinBox(self, mins, maxs) -- WithinAABox didn't work for me.
 	if self.x < math.max(mins.x, maxs.x) and self.x > math.min(mins.x, maxs.x) and
