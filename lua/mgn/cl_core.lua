@@ -79,6 +79,20 @@ hook.Add("HUDPaint", "mgn.HUDPaint", function()
 end)
 
 hook.Add("Think", "mgn.Think", function()
+	-- CLIENTSIDE HACK TIME
+
+	if IsValid(mgn.ControlComputer) then
+		local alert_active = mgn.ControlComputer:IsAlertActive()
+		local system_active = mgn.IsAlertActive()
+		if not alert_active and system_active then
+			mgn.SetAlertActive(false)
+		elseif not alert_active and not system_active then
+			mgn.SetAlertActive(true, mgn.ControlComputer:GetAlertStart())
+		end
+	end
+
+	-- END CLIENTSIDE HACK TIME
+
 	if not mgn.IsAlertActive() or not mgn.Music then
 		return
 	end
@@ -90,6 +104,7 @@ hook.Add("Think", "mgn.Think", function()
 end)
 
 function mgn.SetAlertActive(activate, start)
+	assert(IsValid(mgn.ControlComputer), "Attempting to set activation status when the control computer was not found.")
 	assert(type(activate) == "boolean", "Attempting to set activation status with a non-boolean.")
 
 	if (activate and mgn.IsAlertActive()) or (not activate and not mgn.IsAlertActive()) then
