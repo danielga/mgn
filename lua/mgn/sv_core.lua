@@ -1,72 +1,47 @@
 resource.AddWorkshop("790576613") -- vox audio files
 
 AddCSLuaFile("sh_core.lua")
-AddCSLuaFile("cl_explosion.lua")
 AddCSLuaFile("cl_core.lua")
 AddCSLuaFile("cl_vox.lua")
 AddCSLuaFile("cl_voxlist.lua")
+AddCSLuaFile("stages/sh_idle.lua")
+AddCSLuaFile("stages/cl_exploding.lua")
+AddCSLuaFile("stages/cl_overloading.lua")
+AddCSLuaFile("stages/cl_intro.lua")
 
-include("sv_explosion.lua")
 include("sv_televators.lua") -- metastruct televators specific code
 include("sv_locations.lua") -- metastruct specific entity placements
+include("stages/sh_idle.lua")
+include("stages/sv_exploding.lua")
+include("stages/sv_overloading.lua")
+include("stages/sv_intro.lua")
 
 mgn.AlarmEntities = mgn.AlarmEntities or {}
 
 mgn.LightEntities = mgn.LightEntities or {}
 
-local core_info_screen
-local function GetCoreInfoScreen()
-	if not IsValid(core_info_screen) then
-		core_info_screen = nil
-
-		local screens = ents.FindByClass("lua_screen")
-		for i = 1, #screens do
-			local screen = screens[i]
-			if screen:GetPlace() == "corectrl" then
-				core_info_screen = screen
-				break
-			end
-		end
-	end
-
-	return core_info_screen
-end
-
-function mgn.SetAlertActive(activate)
+function mgn.InitiateOverload()
 	assert(IsValid(mgn.ControlComputer), "Attempting to set activation status when the control computer was not found.")
-	assert(type(activate) == "boolean", "Attempting to set activation status with a non-boolean.")
 
-	if (activate and mgn.IsAlertActive()) or (not activate and not mgn.IsAlertActive()) then
+	if mgn.IsOverloading() then
 		return
 	end
 
-	for i = 1, #mgn.AlarmEntities do
-		local pair = mgn.AlarmEntities[i]
-		pair.Light:SetEnabled(activate)
-		pair.Siren:SetEnabled(activate)
+	mgn.OverloadStage = mgn.Stage.Intro
+	mgn.OverloadStart = CurTime()
+	mgn.ControlComputer:SetOverloadStart(mgn.OverloadStart)
+end
+
+function mgn.InterruptOverload()
+	assert(IsValid(mgn.ControlComputer), "Attempting to set activation status when the control computer was not found.")
+
+	if not mgn.IsOverloading() then
+		return
 	end
 
-	for i = 1, #mgn.LightEntities do
-		mgn.LightEntities[i]:SetEnabled(activate)
-	end
-
-	mgn.SetEmergencyTelevationMode(activate)
-
-	local screen = GetCoreInfoScreen()
-	if IsValid(screen) then
-		screen:SetDTInt(3, activate and 100 or 0) -- damage status
-		screen:SetDTInt(4, activate and -1 or 0) -- radiation status
-		SetGlobalBool("core_door", not activate) -- door status
-	end
-
-	mgn.Exploded = false
-	mgn.ExplosionActive = false
-	mgn.ExplosionLastTick = 0
-	mgn.ExplosionStart = 0
-
-	mgn.AlertActive = activate
-	mgn.AlertStart = activate and CurTime() or 0
-	mgn.ControlComputer:SetAlertStart(mgn.AlertStart)
+	mgn.OverloadStage = mgn.Stage.Idle
+	mgn.OverloadStart = 0
+	mgn.ControlComputer:SetAlertStart(mgn.OverloadStart)
 end
 
 function mgn.Initialize()

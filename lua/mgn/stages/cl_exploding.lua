@@ -1,5 +1,3 @@
-mgn.ExplosionReset = true
-
 local start_time = 0
 local end_time = 0
 local alpha = 0
@@ -16,27 +14,7 @@ local function PlaySoundOnce(snd)
 	end
 end
 
-hook.Add("RenderScreenspaceEffects", "mgn.ExplosionEffect", function()
-	if mgn.ExplosionReset then -- reset vars if some sicko wants to nuke more people
-		mgn.ExplosionReset = false
-
-		start_time = 0
-		end_time = 0
-		alpha = 0
-
-		for _, data in pairs(sounds) do
-			data.Played = false
-		end
-	end
-
-	if not mgn.IsAlertActive() then
-		return
-	end
-
-	if CurTime() < mgn.AlertStart + mgn.AlertLength then
-		return
-	end
-
+local function ExplosionEffect()
 	local realtime = RealTime()
 	if start_time == 0 then
 		start_time = realtime + 6
@@ -84,4 +62,35 @@ hook.Add("RenderScreenspaceEffects", "mgn.ExplosionEffect", function()
 
 	surface.SetDrawColor(Color(0, 0, 0, 48 * alpha))
 	surface.DrawRect(0, 0, ScrW(), ScrH())
-end)
+end
+
+mgn.Stage.Exploding = {
+	Started = false,
+	StartTime = 0,
+	Next = mgn.Stage.Idle,
+	Start = function(self, time)
+		start_time = 0
+		end_time = 0
+		alpha = 0
+
+		for _, data in pairs(sounds) do
+			data.Played = false
+		end
+
+		hook.Add("RenderScreenspaceEffects", "mgn.ExplosionEffect", ExplosionEffect)
+	end,
+	Think = function(self, chrono)
+		return chrono < 22
+	end,
+	End = function(self, time)
+		start_time = 0
+		end_time = 0
+		alpha = 0
+
+		for _, data in pairs(sounds) do
+			data.Played = false
+		end
+
+		hook.Remove("RenderScreenspaceEffects", "mgn.ExplosionEffect")
+	end
+}

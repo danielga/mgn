@@ -6,4 +6,6 @@ A Garry's Mod secret project.
 
 MetaMan - creator
 
-Python1320 - Metastruct televators emergency mode code
+Python1320 - Metastruct televators emergency mode and core interface
+
+Tenrys - Explosion and miscelanious additions and changes
