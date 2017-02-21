@@ -1,12 +1,10 @@
-mgn = mgn or {}
+mgn = mgn or {Stage = {}}
 
 if SERVER then
 	include("sv_core.lua")
 else
 	include("cl_core.lua")
 end
-
-mgn.Stage = {}
 
 mgn.OverloadStage = mgn.Stage.Idle
 mgn.OverloadStart = 0
