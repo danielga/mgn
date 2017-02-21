@@ -14,53 +14,49 @@ mgn.AlarmEntities = mgn.AlarmEntities or {}
 
 mgn.LightEntities = mgn.LightEntities or {}
 
-hook.Add("PopulateLuaScreens", "mgn.PopulateLuaScreens", function()
-	if LMVector then
-		local reactor = LMVector(948, 6, -538, "reactor", true)
-		if reactor:inworld() then
-			LuaScreen.AddConfig({
-				place = "mgn_control_computer",
-				pos = reactor:pos(),
-				ang = Angle(-45, 0, 0)
-			})
-		end
-	end
-end)
-
+local core_info_screen
 local function GetCoreInfoScreen()
-	local screens = ents.FindByClass("lua_screen")
-	for i = 1, #screens do
-		local screen = screens[i]
-		if screen:GetPlace() == "corectrl" then
-			return screen
+	if not IsValid(core_info_screen) then
+		core_info_screen = nil
+
+		local screens = ents.FindByClass("lua_screen")
+		for i = 1, #screens do
+			local screen = screens[i]
+			if screen:GetPlace() == "corectrl" then
+				core_info_screen = screen
+				break
+			end
 		end
 	end
+
+	return core_info_screen
 end
 
-function mgn.SetAlertActive(b)
-	assert(type(b) == "boolean", "Attempting to set activation status with a non-boolean.")
+function mgn.SetAlertActive(activate)
+	assert(IsValid(mgn.ControlComputer), "Attempting to set activation status when the control computer was not found.")
+	assert(type(activate) == "boolean", "Attempting to set activation status with a non-boolean.")
 
-	if (b and mgn.IsAlertActive()) or (not b and not mgn.IsAlertActive()) then
+	if (activate and mgn.IsAlertActive()) or (not activate and not mgn.IsAlertActive()) then
 		return
 	end
 
 	for i = 1, #mgn.AlarmEntities do
 		local pair = mgn.AlarmEntities[i]
-		pair.Light:SetEnabled(b)
-		pair.Siren:SetEnabled(b)
+		pair.Light:SetEnabled(activate)
+		pair.Siren:SetEnabled(activate)
 	end
 
 	for i = 1, #mgn.LightEntities do
-		mgn.LightEntities[i]:SetEnabled(b)
+		mgn.LightEntities[i]:SetEnabled(activate)
 	end
 
-	mgn.SetEmergencyTelevationMode(b)
+	mgn.SetEmergencyTelevationMode(activate)
 
 	local screen = GetCoreInfoScreen()
 	if IsValid(screen) then
-		screen:SetDTInt(3, b and 100 or 0) -- damage status
-		screen:SetDTInt(4, b and -1 or 0) -- radiation status
-		SetGlobalBool("core_door", not b) -- door status
+		screen:SetDTInt(3, activate and 100 or 0) -- damage status
+		screen:SetDTInt(4, activate and -1 or 0) -- radiation status
+		SetGlobalBool("core_door", not activate) -- door status
 	end
 
 	mgn.Exploded = false
@@ -68,8 +64,8 @@ function mgn.SetAlertActive(b)
 	mgn.ExplosionLastTick = 0
 	mgn.ExplosionStart = 0
 
-	mgn.AlertActive = b
-	mgn.AlertStart = b and CurTime() or 0
+	mgn.AlertActive = activate
+	mgn.AlertStart = activate and CurTime() or 0
 	mgn.ControlComputer:SetAlertStart(mgn.AlertStart)
 end
 
