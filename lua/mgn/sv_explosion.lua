@@ -30,6 +30,8 @@ hook.Add("Think", "mgn.Explosion", function()
 		timer.Simple(18, function()
 			mgn.ExplosionActive = false
 			timer.Simple(4, function()
+				mgn.ControlComputer:SetDTFloat(1, 0)
+				ms.core_effect:SetDTBool(3, true)
 				mgn.SetAlertActive(false)
 			end)
 		end)

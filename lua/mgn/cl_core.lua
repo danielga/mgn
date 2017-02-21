@@ -104,7 +104,7 @@ hook.Add("HUDPaint", "mgn.HUDPaint", function()
 end)
 
 local goingToOverload = false
-local introVolume = 1
+local introVolume = 0
 local introLoading = false
 hook.Add("Think", "mgn.Think", function()
 	-- CLIENTSIDE HACK TIME
