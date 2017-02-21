@@ -19,13 +19,20 @@ surface.CreateFont("MGN_Countdown", {
 })
 
 mgn.MusicDownload = "https://files.metaman.xyz/mgn/sound/countdown_music.mp3"
+mgn.IntroMusicDownload = "https://tenrys.montoyo.net/ShareX/2017/Feb/intro_countdown_music.mp3"
 mgn.MusicPath = "mgn/sound/countdown_music.dat"
+mgn.IntroMusicPath = "mgn/sound/intro_countdown_music.dat"
 mgn.ETagPath = "mgn/sound/countdown_music.txt"
+mgn.ETagPath2 = "mgn/sound/intro_countdown_music.txt"
 
 do
 	local etag = file.Read(mgn.ETagPath, "DATA")
 	if etag == "" or not file.Exists(mgn.MusicPath, "DATA") then
 		etag = nil
+	end
+	local etag2 = file.Read(mgn.ETagPath2, "DATA")
+	if etag2 == "" or not file.Exists(mgn.IntroMusicPath, "DATA") then
+		etag2 = nil
 	end
 
 	HTTP({
@@ -43,6 +50,24 @@ do
 		end,
 		failed = function(reason)
 			print("[MGN] Failed downloading music!", reason)
+		end
+	})
+
+	HTTP({
+		method = "get",
+		url = mgn.IntroMusicDownload,
+		headers = {["If-None-Match"] = etag2},
+		success = function(code, body, headers)
+			if code == 200 then
+				file.Write(mgn.IntroMusicPath, body)
+				file.Write(mgn.ETagPath2, headers.ETag)
+				print("[MGN] Finished downloading intro music!", #body)
+			elseif code == 304 then
+				print("[MGN] Intro Music ETag is good!")
+			end
+		end,
+		failed = function(reason)
+			print("[MGN] Failed downloading intro music!", reason)
 		end
 	})
 end
@@ -78,6 +103,9 @@ hook.Add("HUDPaint", "mgn.HUDPaint", function()
 	draw.SimpleTextOutlined(FormatTime(time_left), "MGN_Countdown", ScrW() * 0.5, ScrH() * 0.028, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 4, Color(0, 0, 0, 127))
 end)
 
+local goingToOverload = false
+local introVolume = 1
+local introLoading = false
 hook.Add("Think", "mgn.Think", function()
 	-- CLIENTSIDE HACK TIME
 
@@ -92,6 +120,43 @@ hook.Add("Think", "mgn.Think", function()
 	end
 
 	-- END CLIENTSIDE HACK TIME
+
+	introVolume = Lerp(FrameTime(), introVolume, goingToOverload and 0.7 or 0)
+	if mgn.ControlComputer and mgn.ControlComputer:GetBoostLevel() >= 0.9 and not mgn.IsAlertActive() then
+		if not mgn.IntroMusic then
+			if not introLoading then
+				introLoading = true
+				sound.PlayFile("data/" .. mgn.IntroMusicPath, "", function(channel, errID, errStr)
+					if channel then
+						mgn.IntroMusic = channel
+						mgn.IntroMusic:SetTime(mgn.IntroMusic:GetLength() - 60)
+						introLoading = false
+					end
+				end)
+			end
+		else
+			introLoading = false
+		end
+		if LocalPlayer():IsInZone("reactor") and not goingToOverload then
+			goingToOverload = true
+		elseif not LocalPlayer():IsInZone("reactor") then
+			goingToOverload = false
+		end
+	else
+		if mgn.IntroMusic then
+			mgn.IntroMusic:Stop()
+			mgn.IntroMusic = nil
+		end
+		goingToOverload = false
+	end
+	if mgn.IntroMusic then
+		if mgn.IntroMusic:GetTime() >= mgn.IntroMusic:GetLength() then
+			mgn.IntroMusic:Stop()
+			mgn.IntroMusic = nil
+		else
+			mgn.IntroMusic:SetVolume(introVolume)
+		end
+	end
 
 	if not mgn.IsAlertActive() or not mgn.Music then
 		return
