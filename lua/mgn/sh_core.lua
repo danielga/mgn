@@ -22,7 +22,8 @@ function mgn.IsOverloading()
 end
 
 hook.Add("PlayerNoClip", "mgn.PlayerNoClip", function(ply)
-	if mgn.IsOverloading() and ply:GetMoveType() ~= MOVETYPE_NOCLIP then
+	local stage = mgn.GetOverloadStage()
+	if (stage == mgn.Stage.Overloading or stage == mgn.Stage.Exploding) and ply:GetMoveType() ~= MOVETYPE_NOCLIP then
 		return false
 	end
 end)
@@ -49,6 +50,9 @@ hook.Add("Think", "mgn.StageLogic", function()
 		if stage.End then
 			stage:End(curtime)
 		end
+
+		stage.Started = false
+		stage.StartTime = 0
 
 		mgn.OverloadStage = stage.Next
 	end

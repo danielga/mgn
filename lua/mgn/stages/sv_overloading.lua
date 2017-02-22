@@ -39,8 +39,40 @@ mgn.Stage.Overloading = {
 			screen:SetDTInt(4, -1) -- radiation status
 			SetGlobalBool("core_door", false) -- door status
 		end
+
+		local plys = player.GetAll()
+		for i = 1, #plys do
+			local ply = plys[i]
+			ply:SetMoveType(MOVETYPE_WALK)
+			ply._fly_restrict = true
+		end
 	end,
 	Think = function(self, chrono)
 		return chrono < 206
+	end,
+	End = function(self, time)
+		for i = 1, #mgn.AlarmEntities do
+			local pair = mgn.AlarmEntities[i]
+			pair.Light:SetEnabled(false)
+			pair.Siren:SetEnabled(false)
+		end
+
+		for i = 1, #mgn.LightEntities do
+			mgn.LightEntities[i]:SetEnabled(false)
+		end
+
+		mgn.SetEmergencyTelevationMode(false)
+
+		local screen = GetCoreInfoScreen()
+		if IsValid(screen) then
+			screen:SetDTInt(3, 0) -- damage status
+			screen:SetDTInt(4, 0) -- radiation status
+			SetGlobalBool("core_door", true) -- door status
+		end
+
+		local plys = player.GetAll()
+		for i = 1, #plys do
+			plys[i]._fly_restrict = nil
+		end
 	end
 }
