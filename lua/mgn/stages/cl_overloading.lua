@@ -102,7 +102,7 @@ mgn.Stage.Overloading = {
 			end
 		end
 
-		return chrono < overload_length
+		return chrono < self.Length
 	end,
 	End = function(self, time)
 		if IsValid(mgn.CountdownMusic) then
