@@ -92,5 +92,7 @@ mgn.Stage.Exploding = {
 		end
 
 		hook.Remove("RenderScreenspaceEffects", "mgn.ExplosionEffect")
+
+		mgn.InterruptOverload()
 	end
 }

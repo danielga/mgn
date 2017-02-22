@@ -95,5 +95,7 @@ mgn.Stage.Exploding = {
 		last_tick = 0
 
 		hook.Remove("PlayerShouldTakeDamage", "mgn.ExplosionIgnoreGod")
+
+		mgn.InterruptOverload()
 	end
 }
