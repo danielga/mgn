@@ -47,24 +47,33 @@ mgn.Stage.Intro = {
 		end)
 	end,
 	Think = function(self, chrono)
-		if mgn.IntroMusic then
+		if IsValid(mgn.IntroMusic) then
 			if localplayer:IsInZone("reactor") and not overloading then
 				overloading = true
 			elseif not localplayer:IsInZone("reactor") and overloading then
 				overloading = false
 			end
 
+			if mgn.IntroMusic:GetState() ~= GMOD_CHANNEL_PLAYING then
+				mgn.IntroMusic:Play()
+			end
+
 			intro_volume = math.Clamp(intro_volume + FrameTime() * (overloading and 0.5 or -0.5), 0, 0.7)
 			mgn.IntroMusic:SetVolume(intro_volume)
+
+			if math.abs(chrono - mgn.IntroMusic:GetTime()) >= 1 then
+				mgn.IntroMusic:SetTime(chrono)
+			end
 		end
 
 		return chrono < 60
 	end,
 	End = function(self, time)
-		if mgn.IntroMusic then
+		if IsValid(mgn.IntroMusic) then
 			mgn.IntroMusic:Stop()
-			mgn.IntroMusic = nil
 		end
+
+		mgn.IntroMusic = nil
 
 		overloading = false
 		intro_volume = 0

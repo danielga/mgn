@@ -90,7 +90,11 @@ mgn.Stage.Overloading = {
 	end,
 	-- Countdown music resyncing
 	Think = function(self, chrono)
-		if mgn.CountdownMusic then
+		if IsValid(mgn.CountdownMusic) then
+			if mgn.CountdownMusic:GetState() ~= GMOD_CHANNEL_PLAYING then
+				mgn.CountdownMusic:Play()
+			end
+
 			if math.abs(chrono - mgn.CountdownMusic:GetTime()) >= 1 then
 				mgn.CountdownMusic:SetTime(chrono)
 			end
@@ -99,10 +103,11 @@ mgn.Stage.Overloading = {
 		return chrono < overload_length
 	end,
 	End = function(self, time)
-		if mgn.CountdownMusic then
+		if IsValid(mgn.CountdownMusic) then
 			mgn.CountdownMusic:Stop()
-			mgn.CountdownMusic = nil
 		end
+
+		mgn.CountdownMusic = nil
 
 		hook.Remove("HUDPaint", "mgn.OverloadingHUD")
 	end
