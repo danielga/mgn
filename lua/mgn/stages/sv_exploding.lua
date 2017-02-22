@@ -47,7 +47,10 @@ end
 local last_tick = 0
 mgn.Stage.Exploding = {
 	Started = false,
-	StartTime = 0,
+	StartedAt = 0,
+	StartTime = 266,
+	Length = 22,
+	EndTime = 288,
 	Next = mgn.Stage.Idle,
 	Start = function(self, time)
 		hook.Add("PlayerShouldTakeDamage", "mgn.ExplosionIgnoreGod", ExplosionIgnoreGod)
@@ -89,13 +92,17 @@ mgn.Stage.Exploding = {
 			end
 		end
 
-		return chrono < 22
+		return chrono < self.Length
 	end,
 	End = function(self, time)
 		last_tick = 0
 
 		hook.Remove("PlayerShouldTakeDamage", "mgn.ExplosionIgnoreGod")
 
-		mgn.InterruptOverload()
+		mgn.OverloadStart = 0
+
+		if IsValid(mgn.ControlComputer) then
+			mgn.ControlComputer:SetOverloadStart(0)
+		end
 	end
 }

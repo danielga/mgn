@@ -53,11 +53,10 @@ local function FormatTime(time)
 	return string.format("%02d:%02d:%02d", minutes, seconds, millisecs)
 end
 
-local overload_length = 206
 local white = Color(255, 255, 255, 255)
 local red = Color(255, 0, 0, 255)
 local function OverloadingHUD()
-	local time_left = overload_length - (CurTime() - mgn.Stage.Overloading.StartTime)
+	local time_left = mgn.Stage.Overloading.Length - (CurTime() - mgn.Stage.Overloading.StartedAt)
 	if time_left <= 0 then
 		return
 	end
@@ -74,7 +73,10 @@ end
 
 mgn.Stage.Overloading = {
 	Started = false,
-	StartTime = 0,
+	StartedAt = 0,
+	StartTime = 60,
+	Length = 206,
+	EndTime = 266,
 	Next = mgn.Stage.Exploding,
 	Start = function(self, time)
 		mgn.VOX("emergency announcement, please evacuate through the nearest exit")

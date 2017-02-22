@@ -27,9 +27,10 @@ function mgn.InitiateOverload()
 		return
 	end
 
+	local curtime = CurTime()
 	mgn.OverloadStage = mgn.Stage.Intro
-	mgn.OverloadStart = CurTime()
-	mgn.ControlComputer:SetOverloadStart(mgn.OverloadStart)
+	mgn.OverloadStart = curtime
+	mgn.ControlComputer:SetOverloadStart(curtime)
 end
 
 function mgn.InterruptOverload()
@@ -44,11 +45,11 @@ function mgn.InterruptOverload()
 	end
 
 	mgn.OverloadStage.Started = false
-	mgn.OverloadStage.StartTime = 0
+	mgn.OverloadStage.StartedAt = 0
 
 	mgn.OverloadStage = mgn.Stage.Idle
 	mgn.OverloadStart = 0
-	mgn.ControlComputer:SetOverloadStart(mgn.OverloadStart)
+	mgn.ControlComputer:SetOverloadStart(0)
 end
 
 function mgn.Initialize()

@@ -34,7 +34,10 @@ local overloading = false
 local intro_volume = 0
 mgn.Stage.Intro = {
 	Started = false,
+	StartedAt = 0,
 	StartTime = 0,
+	Length = 60,
+	EndTime = 60,
 	Next = mgn.Stage.Overloading,
 	Start = function(self, time)
 		localplayer = LocalPlayer()
@@ -66,7 +69,7 @@ mgn.Stage.Intro = {
 			end
 		end
 
-		return chrono < 60
+		return chrono < self.Length
 	end,
 	End = function(self, time)
 		if IsValid(mgn.IntroMusic) then

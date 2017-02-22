@@ -37,22 +37,23 @@ hook.Add("Think", "mgn.StageLogic", function()
 
 	local curtime = CurTime()
 	if not stage.Started then
-		stage.StartTime = curtime
+		local start_time = mgn.GetOverloadStart() + stage.StartTime
+		stage.StartedAt = start_time
 
 		if stage.Start then
-			stage:Start(curtime)
+			stage:Start(start_time)
 		end
 
 		stage.Started = true
 	end
 
-	if not stage:Think(curtime - stage.StartTime) then
+	if not stage:Think(curtime - stage.StartedAt) then
 		if stage.End then
 			stage:End(curtime)
 		end
 
 		stage.Started = false
-		stage.StartTime = 0
+		stage.StartedAt = 0
 
 		mgn.OverloadStage = stage.Next
 	end

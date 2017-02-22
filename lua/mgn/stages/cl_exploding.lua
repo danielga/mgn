@@ -66,7 +66,10 @@ end
 
 mgn.Stage.Exploding = {
 	Started = false,
-	StartTime = 0,
+	StartedAt = 0,
+	StartTime = 266,
+	Length = 22,
+	EndTime = 288,
 	Next = mgn.Stage.Idle,
 	Start = function(self, time)
 		start_time = 0
@@ -80,7 +83,7 @@ mgn.Stage.Exploding = {
 		hook.Add("RenderScreenspaceEffects", "mgn.ExplosionEffect", ExplosionEffect)
 	end,
 	Think = function(self, chrono)
-		return chrono < 22
+		return chrono < self.Length
 	end,
 	End = function(self, time)
 		start_time = 0
@@ -93,6 +96,6 @@ mgn.Stage.Exploding = {
 
 		hook.Remove("RenderScreenspaceEffects", "mgn.ExplosionEffect")
 
-		mgn.InterruptOverload()
+		mgn.OverloadStart = 0
 	end
 }

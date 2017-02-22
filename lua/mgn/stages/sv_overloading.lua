@@ -18,7 +18,10 @@ end
 
 mgn.Stage.Overloading = {
 	Started = false,
-	StartTime = 0,
+	StartedAt = 0,
+	StartTime = 60,
+	Length = 206,
+	EndTime = 266,
 	Next = mgn.Stage.Exploding,
 	Start = function(self, time)
 		for i = 1, #mgn.AlarmEntities do
@@ -48,7 +51,7 @@ mgn.Stage.Overloading = {
 		end
 	end,
 	Think = function(self, chrono)
-		return chrono < 206
+		return chrono < self.Length
 	end,
 	End = function(self, time)
 		for i = 1, #mgn.AlarmEntities do
