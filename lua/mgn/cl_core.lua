@@ -27,8 +27,22 @@ function mgn.InitiateOverload(start)
 		return
 	end
 
-	mgn.OverloadStage = mgn.Stage.Intro
-	mgn.OverloadStart = start or CurTime()
+	local curtime = CurTime()
+	if start then
+		local offset = curtime - start
+		local stage = mgn.Stage.Intro
+		while stage.EndTime < offset and stage ~= mgn.Stage.Idle do
+			stage = stage.Next
+		end
+
+		assert(stage ~= mgn.Stage.Idle, "Attempting to initiate overload with a starting time (too late to be in event).")
+
+		mgn.OverloadStage = stage
+		mgn.OverloadStart = start
+	else
+		mgn.OverloadStage = mgn.Stage.Intro
+		mgn.OverloadStart = curtime
+	end
 end
 
 function mgn.InterruptOverload()
@@ -38,14 +52,12 @@ function mgn.InterruptOverload()
 		return
 	end
 
-	local curtime = CurTime()
-	for _, stage in pairs(mgn.Stage) do
-		if stage.End then
-			stage:End(curtime)
-		end
-		
-		stage.Started = false
+	if mgn.OverloadStage.End then
+		mgn.OverloadStage:End(CurTime())
 	end
+
+	mgn.OverloadStage.Started = false
+	mgn.OverloadStage.StartedAt = 0
 
 	mgn.OverloadStage = mgn.Stage.Idle
 	mgn.OverloadStart = 0

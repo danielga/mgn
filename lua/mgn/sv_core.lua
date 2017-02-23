@@ -27,9 +27,10 @@ function mgn.InitiateOverload()
 		return
 	end
 
+	local curtime = CurTime()
 	mgn.OverloadStage = mgn.Stage.Intro
-	mgn.OverloadStart = CurTime()
-	mgn.ControlComputer:SetOverloadStart(mgn.OverloadStart)
+	mgn.OverloadStart = curtime
+	mgn.ControlComputer:SetOverloadStart(curtime)
 end
 
 function mgn.InterruptOverload()
@@ -39,18 +40,16 @@ function mgn.InterruptOverload()
 		return
 	end
 
-	local curtime = CurTime()
-	for _, stage in pairs(mgn.Stage) do
-		if stage.End then
-			stage:End(curtime)
-		end
-		
-		stage.Started = false
+	if mgn.OverloadStage.End then
+		mgn.OverloadStage:End(CurTime())
 	end
+
+	mgn.OverloadStage.Started = false
+	mgn.OverloadStage.StartedAt = 0
 
 	mgn.OverloadStage = mgn.Stage.Idle
 	mgn.OverloadStart = 0
-	mgn.ControlComputer:SetOverloadStart(mgn.OverloadStart)
+	mgn.ControlComputer:SetOverloadStart(0)
 end
 
 function mgn.Initialize()
@@ -144,7 +143,5 @@ function mgn.Initialize()
 			end
 		end
 	end
-
-	mgn.SetAlertActive(false)
 end
 hook.Add("Initialize", "mgn.Initialize", mgn.Initialize)

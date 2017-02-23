@@ -47,7 +47,10 @@ end
 local last_tick = 0
 mgn.Stage.Exploding = {
 	Started = false,
-	StartTime = 0,
+	StartedAt = 0,
+	StartTime = 266,
+	Length = 22,
+	EndTime = 288,
 	Next = mgn.Stage.Idle,
 	Start = function(self, time)
 		hook.Add("PlayerShouldTakeDamage", "mgn.ExplosionIgnoreGod", ExplosionIgnoreGod)
@@ -89,30 +92,17 @@ mgn.Stage.Exploding = {
 			end
 		end
 
-		return chrono < 22
+		return chrono < self.Length
 	end,
 	End = function(self, time)
 		last_tick = 0
 
-		for i = 1, #mgn.AlarmEntities do
-			local pair = mgn.AlarmEntities[i]
-			pair.Light:SetEnabled(false)
-			pair.Siren:SetEnabled(false)
-		end
-
-		for i = 1, #mgn.LightEntities do
-			mgn.LightEntities[i]:SetEnabled(false)
-		end
-
-		mgn.SetEmergencyTelevationMode(false)
-
-		local screen = GetCoreInfoScreen()
-		if IsValid(screen) then
-			screen:SetDTInt(3, 0) -- damage status
-			screen:SetDTInt(4, 0) -- radiation status
-			SetGlobalBool("core_door", true) -- door status
-		end
-
 		hook.Remove("PlayerShouldTakeDamage", "mgn.ExplosionIgnoreGod")
+
+		mgn.OverloadStart = 0
+
+		if IsValid(mgn.ControlComputer) then
+			mgn.ControlComputer:SetOverloadStart(0)
+		end
 	end
 }
