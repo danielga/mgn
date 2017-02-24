@@ -26,12 +26,18 @@ mgn.Stage.Overloading = {
 	Start = function(self, time)
 		for i = 1, #mgn.AlarmEntities do
 			local pair = mgn.AlarmEntities[i]
-			pair.Light:SetEnabled(true)
-			pair.Siren:SetEnabled(true)
+			if IsValid(pair.Light) then
+				pair.Light:SetEnabled(true)
+			end
+			if IsValid(pair.Siren) then
+				pair.Siren:SetEnabled(true)
+			end
 		end
 
 		for i = 1, #mgn.LightEntities do
-			mgn.LightEntities[i]:SetEnabled(true)
+			if IsValid(mgn.LightEntities[i]) then
+				mgn.LightEntities[i]:SetEnabled(true)
+			end
 		end
 
 		mgn.SetEmergencyTelevationMode(true)
@@ -56,8 +62,12 @@ mgn.Stage.Overloading = {
 	End = function(self, time)
 		for i = 1, #mgn.AlarmEntities do
 			local pair = mgn.AlarmEntities[i]
-			pair.Light:SetEnabled(false)
-			pair.Siren:SetEnabled(false)
+			if IsValid(pair.Light) then
+				pair.Light:SetEnabled(false)
+			end
+			if IsValid(pair.Siren) then
+				pair.Siren:SetEnabled(false)
+			end
 		end
 
 		for i = 1, #mgn.LightEntities do

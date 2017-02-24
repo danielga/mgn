@@ -145,3 +145,4 @@ function mgn.Initialize()
 	end
 end
 hook.Add("Initialize", "mgn.Initialize", mgn.Initialize)
+hook.Add("PostCleanupMap", "mgn.PostCleanupMap", mgn.Initialize)
