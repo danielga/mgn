@@ -83,6 +83,8 @@ mgn.Stage.Overloading = {
 			SetGlobalBool("core_door", true) -- door status
 		end
 
+		mgn.ControlComputer:SetDTFloat(4, 0)
+
 		local plys = player.GetAll()
 		for i = 1, #plys do
 			plys[i]._fly_restrict = nil
