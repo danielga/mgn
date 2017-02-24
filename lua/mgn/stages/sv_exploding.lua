@@ -60,6 +60,7 @@ mgn.Stage.Exploding = {
 		-- rape the shit out of players every 0.5 secs
 		if chrono >= 6 and chrono <= 18 then
 			mgn.ControlComputer:SetDTFloat(1, 0)
+			mgn.ControlComputer:SetDTFloat(4, 0)
 			if ms and IsValid(ms.core_effect) and not ms.core_effect:GetDTBool(3) then
 				ms.core_effect:SetDTBool(3, true)
 			end
