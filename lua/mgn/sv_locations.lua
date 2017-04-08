@@ -1,3 +1,9 @@
+if LMVector == nil then
+	mgn.AlarmLocations = {}
+	mgn.LightLocations = {}
+	return
+end
+
 mgn.AlarmLocations = {
 	-- Lobby
 	{Position = LMVector(-373, -623, 274, "lobby", true):pos(), Normal = Vector(0, 1, 0)},

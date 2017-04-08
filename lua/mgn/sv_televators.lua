@@ -1,14 +1,14 @@
-local doorloc = LMVector(-2091, 4912, -70, "land_caves", true)
+local doorloc = LMVector ~= nil and LMVector(-2091, 4912, -70, "land_caves", true) or nil
 local doorradius = 100
-local roomcenter = LMVector(-2083, 5142, -21, "land_caves", true)
+local roomcenter = LMVector ~= nil and LMVector(-2083, 5142, -21, "land_caves", true) or nil
 
 -- land position for emergency teleport target
-local a = LMVector(-1886, 4962, -174, "land_caves", true):pos()
-local b = LMVector(-2289, 5281, -174, "land_caves", true):pos()
+local a = LMVector ~= nil and LMVector(-1886, 4962, -174, "land_caves", true):pos() or nil
+local b = LMVector ~= nil and LMVector(-2289, 5281, -174, "land_caves", true):pos() or nil
 
 local PLAYER = FindMetaTable("Player")
 
-if not roomcenter:inworld() then
+if roomcenter == nil or not roomcenter:inworld() then
 	function mgn.SetEmergencyTelevationMode()
 	end
 
