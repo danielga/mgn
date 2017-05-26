@@ -144,4 +144,4 @@ function mgn.Initialize()
 		end
 	end
 end
-hook.Add("Initialize", "mgn.Initialize", mgn.Initialize)
+hook.Add("InitPostEntity", "mgn.Initialize", mgn.Initialize)
