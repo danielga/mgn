@@ -55,13 +55,20 @@ end
 
 local white = Color(255, 255, 255, 255)
 local red = Color(255, 0, 0, 255)
+local OverloadingHUDKill
 local function OverloadingHUD()
 	local time_left = mgn.Stage.Overloading.Length - (CurTime() - mgn.Stage.Overloading.StartedAt)
 	if time_left <= 0 then
+		time_left = 0
+	end
+	if OverloadingHUDKill and (RealTime()-OverloadingHUDKill) > 2.1 then
+		hook.Remove("HUDPaint", "mgn.OverloadingHUD")
 		return
 	end
-
-	draw.SimpleTextOutlined("████ ████████ IMMINENT! PLEASE EVACUATE THROUGH THE NEAREST EXIT!", "MGN_Alert", ScrW() * 0.5, ScrH() * 0.009, red, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, Color(0, 0, 0, 127))
+	
+	draw.SimpleTextOutlined(
+		time_left == -0.5 and "ALERT! ALERT! ALERT! ALERT! ALERT!"
+		or "MAJOR DISASTER IMMINENT! EVACUATE TO THE NEAREST EXIT!", "MGN_Alert", ScrW() * 0.5, ScrH() * 0.009, red, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, Color(0, 0, 0, 127))
 
 	local color = white
 	if time_left <= 30 then
@@ -87,7 +94,7 @@ mgn.Stage.Overloading = {
 				mgn.CountdownMusic:SetTime(CurTime() - time)
 			end
 		end)
-
+		OverloadingHUDKill = false
 		hook.Add("HUDPaint", "mgn.OverloadingHUD", OverloadingHUD)
 	end,
 	-- Countdown music resyncing
@@ -110,7 +117,8 @@ mgn.Stage.Overloading = {
 		end
 
 		mgn.CountdownMusic = nil
-
-		hook.Remove("HUDPaint", "mgn.OverloadingHUD")
+		OverloadingHUDKill=RealTime()
+	
+		
 	end
 }
