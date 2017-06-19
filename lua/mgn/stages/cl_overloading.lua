@@ -66,6 +66,8 @@ local function OverloadingHUD()
 		return
 	end
 	
+	if RealTime()-(mgn.last_draw_disasterscreen or 0)<1 then return end
+	
 	draw.SimpleTextOutlined(
 		time_left == -0.5 and "ALERT! ALERT! ALERT! ALERT! ALERT!"
 		or "MAJOR DISASTER IMMINENT! EVACUATE TO THE NEAREST EXIT!", "MGN_Alert", ScrW() * 0.5, ScrH() * 0.009, red, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, Color(0, 0, 0, 127))
@@ -74,7 +76,7 @@ local function OverloadingHUD()
 	if time_left <= 30 then
 		color = red
 	end
-
+	
 	draw.SimpleTextOutlined(FormatTime(time_left), "MGN_Countdown", ScrW() * 0.5, ScrH() * 0.028, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 4, Color(0, 0, 0, 127))
 end
 
