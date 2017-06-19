@@ -1,6 +1,6 @@
 file.CreateDir("mgn/sound")
 
-mgn.IntroMusicDownload = "https://files.metaman.xyz/mgn/sound/intro_music.mp3"
+mgn.IntroMusicDownload = "https://metastruct.github.io/mgn/sound/intro_music.mp3"
 mgn.IntroMusicPath = "mgn/sound/intro_music.dat"
 mgn.IntroETagPath = "mgn/sound/intro_music.txt"
 
