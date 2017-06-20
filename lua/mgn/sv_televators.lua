@@ -20,6 +20,10 @@ if roomcenter == nil or not roomcenter:inworld() then
 end
 
 local function GetDoor()
+	local door = ents.FindByName"cbd1"[1]
+	
+	if IsValid(door) then return door end
+	
 	local doors = ents.FindInSphere(doorloc:pos(), doorradius)
 	for i = 1, #doors do
 		local door = doors[i]
@@ -29,17 +33,14 @@ local function GetDoor()
 	end
 end
 
-function mgn.SetEmergencyTelevationMode(e)
-	local door = GetDoor()
-	if door then
-		if e then
-			door:Fire("close")
-			door:Fire("lock")
-		else
-			door:Fire("unlock")
-			door:Fire("open")
-		end
+local function setsafetylockdoor(door,yes)
+	local ent,dist = ents.closest(ents.FindByClass"lua_screen",door:GetPos())
+	if dist<200 and ent:GetPlace():find"door" then
+		local _ = ent.SetSafetyLock and ent:SetSafetyLock(yes)
 	end
+end
+
+function mgn.SetEmergencyTelevationMode(e)
 
 	local screens = ents.FindByClass("lua_screen")
 	for i = 1, #screens do
@@ -48,6 +49,25 @@ function mgn.SetEmergencyTelevationMode(e)
 			screen:SetEmergency(e)
 		end
 	end
+
+	local door = GetDoor()
+	if door then
+		local tid = "unlock_door_"..door:EntIndex()
+		if e then
+			if timer.Exists(tid) then
+				timer.Destroy(tid)
+			end
+			door:Fire("close")
+			door:Fire("lock")
+			setsafetylockdoor(door,true)
+		else
+			timer.Create(tid,5,1,function()
+				return IsValid(door) and door:Fire"unlock"
+				setsafetylockdoor(door,false)
+			end)
+		end
+	end
+
 end
 
 local vec = Vector(0, 0, a.z)
