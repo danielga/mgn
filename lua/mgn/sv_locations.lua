@@ -1,3 +1,8 @@
+
+if LMVector == nil then
+	pcall(require,'landmark')
+end
+
 if LMVector == nil then
 	mgn.AlarmLocations = {}
 	mgn.LightLocations = {}
