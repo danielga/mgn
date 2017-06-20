@@ -121,5 +121,13 @@ mgn.LightLocations = FILT{
 }
 
 if missing[1] then
-	Msg"[MGN] Missing landmarks: " print(table.concat(missing,', '))
+	local t={}
+	for k,v in next,missing do
+		t[v]=(t[v] or 0) + 1
+	end
+	local tt={}
+	for k,v in next,t do
+		tt[#tt+1] = ("%s x%d"):format(k,v)	
+	end
+	Msg"[MGN] Missing landmarks: " print(table.concat(tt,', '))
 end
