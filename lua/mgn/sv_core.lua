@@ -53,6 +53,11 @@ function mgn.InterruptOverload()
 end
 
 function mgn.Initialize()
+	if not mgn.AlarmLocations or nil == next(mgn.AlarmLocations) then
+		Msg"[MGN] "print'Alarm locations are missing!'
+		return
+	end
+
 	for i = 1, math.max(#mgn.AlarmLocations, #mgn.AlarmEntities) do
 		if not mgn.AlarmLocations[i] then
 			local pair = mgn.AlarmEntities[i]
