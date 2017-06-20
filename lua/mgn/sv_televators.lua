@@ -62,7 +62,7 @@ function mgn.SetEmergencyTelevationMode(e)
 			setsafetylockdoor(door,true)
 		else
 			timer.Create(tid,5,1,function()
-				return IsValid(door) and door:Fire"unlock"
+				local _ = IsValid(door) and door:Fire"unlock"
 				setsafetylockdoor(door,false)
 			end)
 		end
