@@ -14,10 +14,11 @@ local function FILT(t)
 	for i=#t,1,-1 do
 		local data = t[i]
 		
-		table.insert(data.Position,true)
-		data.Position = LMVector(unpack(data.Position)) 
-		if data.Position then
-			data.Position = data.Position:pos()
+		local lmpos = data.Position
+		table.insert(lmpos,true)
+		lmpos = LMVector(unpack(lmpos)) 
+		if lmpos then
+			data.Position = lmpos:pos()
 		else
 			table.remove(t,i)
 			missing[#missing+1] = tostring(data.Position[4] or "???")
