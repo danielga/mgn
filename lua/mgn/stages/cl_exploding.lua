@@ -2,12 +2,31 @@ local start_time = 0
 local end_time = 0
 local alpha = 0
 local sounds = {
-	explosion = {Path = "ambient/intro/explosion02.wav", Played = false},
-	citadelpan = {Path = "ambient/intro/citadelpan.wav", Played = false},
-	debris = {Path = "ambient/intro/debris02.wav", Played = false}
+	explosion = {Path = {"ambient/intro/explosion02.wav",'ambient/medieval_thunder4.wav','ambient/explosions/explode_6.wav'}, Played = false},
+	citadelpan = {Path = {"ambient/intro/citadelpan.wav",'ambient/explosions/exp2.wav'}, Played = false},
+	debris = {Path = {"ambient/intro/debris02.wav",'ambient/explosions/exp3.wav'}, Played = false}
 }
+local processed
+local function process_all()
+	if processed then 
+		return
+	else
+		processed=true
+	end
+	for k,data in next,sounds do
+		local paths = data.Path
+		data.Path=paths[1]
+		for k,v in next,paths do
+			if file.Exists(v,'GAME') then
+				data.Path=v
+				break
+			end
+		end
+	end
+end
 
 local function PlaySoundOnce(snd)
+	process_all()
 	if sounds[snd] and not sounds[snd].Played then
 		surface.PlaySound(sounds[snd].Path)
 		sounds[snd].Played = true
