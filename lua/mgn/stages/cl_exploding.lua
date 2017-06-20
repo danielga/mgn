@@ -79,7 +79,9 @@ mgn.Stage.Exploding = {
 		for _, data in pairs(sounds) do
 			data.Played = false
 		end
-
+		
+		mgn.VOX("alert. containment breached")
+		
 		hook.Add("RenderScreenspaceEffects", "mgn.ExplosionEffect", ExplosionEffect)
 	end,
 	Think = function(self, chrono)
