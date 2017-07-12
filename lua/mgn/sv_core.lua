@@ -117,6 +117,7 @@ function mgn.Initialize()
 				mgn.LightEntities[i]
 
 			if IsValid(light) then
+				light:SetID(i)
 				light:SetPos(position)
 				light:SetAngles(angles)
 			else
@@ -132,3 +133,4 @@ function mgn.Initialize()
 	end
 end
 hook.Add("InitPostEntity", "mgn.Initialize", mgn.Initialize)
+hook.Add("PostCleanupMap", "mgn.PostCleanupMap", mgn.Initialize)
