@@ -94,7 +94,7 @@ mgn.Stage.Exploding = {
 
 				local npcs = ents.FindByClass("lua_npc_wander")
 				for i = 1, #npcs do
-					v:TakeDamageInfo(npcs[i])
+					npcs[i]:TakeDamageInfo(di)
 				end
 			end
 		end
