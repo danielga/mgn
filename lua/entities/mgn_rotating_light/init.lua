@@ -27,6 +27,8 @@ function ENT:Initialize()
 	self.Spotlight2:SetLocalAngles(Angle(180, 0, 0))
 	self.Spotlight2:Spawn()
 	self.Spotlight2:Activate()
+
+	self.Enabled = false
 end
 
 function ENT:OnRemove()
@@ -53,4 +55,26 @@ function ENT:Think()
 	end
 
 	return true
+end
+
+function ENT:SetEnabled(state)
+	if state == self.Enabled then
+		return
+	end
+
+	self.Enabled = state
+
+	if state then
+		self.Spotlight1:Fire("LightOn", "", 0)
+		self.Spotlight2:Fire("LightOn", "", 0)
+		self:SetModel("models/props_c17/light_cagelight01_on.mdl")
+	else
+		self.Spotlight1:Fire("LightOff", "", 0)
+		self.Spotlight2:Fire("LightOff", "", 0)
+		self:SetModel("models/props_c17/light_cagelight01_off.mdl")
+	end
+end
+
+function ENT:GetEnabled()
+	return self.Enabled
 end

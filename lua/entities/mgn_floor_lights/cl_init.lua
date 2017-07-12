@@ -11,22 +11,31 @@ end
 
 function ENT:Think()
 	if self:GetEnabled() then
-		self.CurrentLight = (self.CurrentLight + 1) % self:GetLightCount()
-	end
+		local light = mgn.LightLocations[self:GetID()]
+		if light then
+			self.CurrentLight = (self.CurrentLight + 1) % light.LightCount
 
-	--local hwidth, hdepth, hssize = self:GetWidth() / 2, self:GetDepth() / 2, self:GetSpriteSize() / 2
-	--self:SetRenderBounds(Vector(-hdepth - hssize, -hwidth - hssize, -hssize), Vector(hdepth + hssize, hwidth + hssize, hssize))
+			-- TODO: This is not optimal but since it's only called ~5 times a second, I'll let it slide for now
+			local hwidth, hdepth, hssize = light.Width / 2, light.Depth / 2, light.SpriteSize / 2
+			self:SetRenderBounds(Vector(-hdepth - hssize, -hwidth - hssize, -hssize), Vector(hdepth + hssize, hwidth + hssize, hssize))
+		end
+	end
 
 	self:SetNextClientThink(CurTime() + 0.2)
 end
 
 function ENT:Draw()
 	if self:GetEnabled() then
+		local light = mgn.LightLocations[self:GetID()]
+		if not light then
+			return
+		end
+
 		render.SetMaterial(self.Sprite)
 
-		local ssize, hwidth, hdepth, lcount = self:GetSpriteSize(), self:GetWidth() / 2, self:GetDepth() / 2, self:GetLightCount()
+		local ssize, hwidth, hdepth, lcount = light.SpriteSize, light.Width / 2, light.Depth / 2, light.LightCount
 		local forward = self.CurrentLight * hdepth / lcount - hdepth * (0.5 - 1 / (2 * lcount))
-		if self:GetDoubleStriped() then
+		if light.DoubleStriped then
 			render.DrawSprite(self:GetPos() - self:GetRight() * hwidth + self:GetForward() * forward, ssize, ssize, self.Green)
 			render.DrawSprite(self:GetPos() + self:GetRight() * hwidth + self:GetForward() * forward, ssize, ssize, self.Green)
 		else

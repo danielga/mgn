@@ -1,3 +1,4 @@
+include("sh_locations.lua")
 include("cl_vox.lua")
 include("stages/sh_idle.lua")
 include("stages/cl_exploding.lua")

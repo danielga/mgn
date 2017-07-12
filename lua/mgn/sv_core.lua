@@ -1,6 +1,7 @@
 resource.AddWorkshop("790576613") -- vox audio files
 
 AddCSLuaFile("sh_core.lua")
+AddCSLuaFile("sh_locations.lua")
 AddCSLuaFile("cl_core.lua")
 AddCSLuaFile("cl_vox.lua")
 AddCSLuaFile("cl_voxlist.lua")
@@ -10,7 +11,7 @@ AddCSLuaFile("stages/cl_overloading.lua")
 AddCSLuaFile("stages/cl_intro.lua")
 
 include("sv_televators.lua") -- metastruct televators specific code
-include("sv_locations.lua") -- metastruct specific entity placements
+include("sh_locations.lua") -- metastruct specific entity placements
 include("stages/sh_idle.lua")
 include("stages/sv_exploding.lua")
 include("stages/sv_overloading.lua")
@@ -110,33 +111,19 @@ function mgn.Initialize()
 
 			mgn.LightEntities[i] = nil
 		else
-			local position, angles, dstriped, width, depth, ssize, lcount, light =
+			local position, angles, light =
 				mgn.LightLocations[i].Position,
 				mgn.LightLocations[i].Angles,
-				mgn.LightLocations[i].DoubleStriped,
-				mgn.LightLocations[i].Width,
-				mgn.LightLocations[i].Depth,
-				mgn.LightLocations[i].SpriteSize,
-				mgn.LightLocations[i].LightCount,
 				mgn.LightEntities[i]
 
 			if IsValid(light) then
 				light:SetPos(position)
 				light:SetAngles(angles)
-				light:SetDoubleStriped(dstriped)
-				light:SetWidth(width)
-				light:SetDepth(depth)
-				light:SetSpriteSize(ssize)
-				light:SetLightCount(lcount)
 			else
 				light = ents.Create("mgn_floor_lights")
+				light:SetID(i)
 				light:SetPos(position)
 				light:SetAngles(angles)
-				light:SetDoubleStriped(dstriped)
-				light:SetWidth(width)
-				light:SetDepth(depth)
-				light:SetSpriteSize(ssize)
-				light:SetLightCount(lcount)
 				light:Spawn()
 
 				mgn.LightEntities[i] = light
