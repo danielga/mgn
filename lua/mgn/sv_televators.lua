@@ -3,12 +3,10 @@ local doorradius = 100
 local roomcenter = LMVector ~= nil and LMVector(-2083, 5142, -21, "land_caves", true) or nil
 
 -- land position for emergency teleport target
-local a = LMVector ~= nil and LMVector(-1886, 4962, -174, "land_caves", true):pos() or nil
-local b = LMVector ~= nil and LMVector(-2289, 5281, -174, "land_caves", true):pos() or nil
+local telearea1 = LMVector ~= nil and LMVector(-1886, 4962, -174, "land_caves", true) or nil
+local telearea2 = LMVector ~= nil and LMVector(-2289, 5281, -174, "land_caves", true) or nil
 
-local PLAYER = FindMetaTable("Player")
-
-if roomcenter == nil or not roomcenter:inworld() then
+if doorloc == nil or roomcenter == nil or telearea1 == nil or telearea2 == nil or not roomcenter:inworld() then
 	function mgn.SetEmergencyTelevationMode()
 	end
 
@@ -17,7 +15,11 @@ if roomcenter == nil or not roomcenter:inworld() then
 
 	print("[MGN] Unable to find emergency televation destination!")
 	return
+else
+	doorloc, telearea1, telearea2 = doorloc:pos(), telearea1:pos(), telearea2:pos()
 end
+
+local PLAYER = FindMetaTable("Player")
 
 local function GetDoor()
 	local door = ents.FindByName("cbd1")[1]
@@ -25,7 +27,7 @@ local function GetDoor()
 		return door
 	end
 
-	local doors = ents.FindInSphere(doorloc:pos(), doorradius)
+	local doors = ents.FindInSphere(doorloc, doorradius)
 	for i = 1, #doors do
 		local door = doors[i]
 		if door:GetClass() == "func_door" then
@@ -62,7 +64,7 @@ function mgn.SetEmergencyTelevationMode(state)
 			door:Fire("lock")
 			SetSafetyLockDoor(door, true)
 		else
-			timer.Create(tid,5,1,function()
+			timer.Create(tid, 5, 1,function()
 				if IsValid(door) then
 					door:Fire("unlock")
 				end
@@ -74,28 +76,28 @@ function mgn.SetEmergencyTelevationMode(state)
 
 end
 
-local vec = Vector(0, 0, a.z)
+local vec = Vector(0, 0, telearea1.z)
 local function FindEscapePos(ply)
-	vec.z = a.z
+	vec.z = telearea1.z
 
 	for i = 1, 100 do
-		vec.x = math.Rand(a.x, b.x)
-		vec.y = math.Rand(a.y, b.y)
+		vec.x = math.Rand(telearea1.x, telearea2.x)
+		vec.y = math.Rand(telearea1.y, telearea2.y)
 		if not ply:IsStuck(false, vec) then
 			return vec
 		end
 	end
 
-	vec.z = a.z + 80
+	vec.z = telearea1.z + 80
 	for i = 1, 100 do
-		vec.x = math.Rand(a.x, b.x)
-		vec.y = math.Rand(a.y, b.y)
+		vec.x = math.Rand(telearea1.x, telearea2.x)
+		vec.y = math.Rand(telearea1.y, telearea2.y)
 		if not ply:IsStuck(true, vec) then
 			return vec
 		end
 	end
 
-	return a
+	return telearea1
 end
 
 local function Tesla(pos)
