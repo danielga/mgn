@@ -15,7 +15,7 @@ surface.CreateFont("MGN_Countdown", {
 	antialias = true
 })
 
-mgn.CountdownMusicDownload = "https://files.metaman.xyz/mgn/sound/countdown_music.mp3"
+mgn.CountdownMusicDownload = "https://metastruct.github.io/mgn/sound/countdown_music.mp3"
 mgn.CountdownMusicPath = "mgn/sound/countdown_music.dat"
 mgn.CountdownETagPath = "mgn/sound/countdown_music.txt"
 
@@ -55,28 +55,39 @@ end
 
 local white = Color(255, 255, 255, 255)
 local red = Color(255, 0, 0, 255)
-local OverloadingHUDKill
+local hudendtime
 local function OverloadingHUD()
 	local time_left = mgn.Stage.Overloading.Length - (CurTime() - mgn.Stage.Overloading.StartedAt)
 	if time_left <= 0 then
 		time_left = 0
 	end
-	if OverloadingHUDKill and (RealTime()-OverloadingHUDKill) > 2.1 then
+
+	if hudendtime and RealTime() > hudendtime then
 		hook.Remove("HUDPaint", "mgn.OverloadingHUD")
 		return
 	end
-	
-	if RealTime()-(mgn.last_draw_disasterscreen or 0)<1 then return end
-	
+
+	if RealTime() - (mgn.last_draw_disasterscreen or 0) < 1 then
+		return
+	end
+
 	draw.SimpleTextOutlined(
-		time_left == -0.5 and "ALERT! ALERT! ALERT! ALERT! ALERT!"
-		or "MAJOR DISASTER IMMINENT! EVACUATE TO THE NEAREST EXIT!", "MGN_Alert", ScrW() * 0.5, ScrH() * 0.009, red, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 3, Color(0, 0, 0, 127))
+		time_left == -0.5 and "ALERT! ALERT! ALERT! ALERT! ALERT!" or "MAJOR DISASTER IMMINENT! EVACUATE TO THE NEAREST EXIT!",
+		"MGN_Alert",
+		ScrW() * 0.5,
+		ScrH() * 0.009,
+		red,
+		TEXT_ALIGN_CENTER,
+		TEXT_ALIGN_TOP,
+		3,
+		Color(0, 0, 0, 127)
+	)
 
 	local color = white
 	if time_left <= 30 then
 		color = red
 	end
-	
+
 	draw.SimpleTextOutlined(FormatTime(time_left), "MGN_Countdown", ScrW() * 0.5, ScrH() * 0.028, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 4, Color(0, 0, 0, 127))
 end
 
@@ -96,7 +107,8 @@ mgn.Stage.Overloading = {
 				mgn.CountdownMusic:SetTime(CurTime() - time)
 			end
 		end)
-		OverloadingHUDKill = false
+
+		hudendtime = nil
 		hook.Add("HUDPaint", "mgn.OverloadingHUD", OverloadingHUD)
 	end,
 	-- Countdown music resyncing
@@ -119,8 +131,6 @@ mgn.Stage.Overloading = {
 		end
 
 		mgn.CountdownMusic = nil
-		OverloadingHUDKill=RealTime()
-	
-		
+		hudendtime = RealTime() + 2.1
 	end
 }

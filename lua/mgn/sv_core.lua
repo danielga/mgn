@@ -54,8 +54,8 @@ function mgn.InterruptOverload()
 end
 
 function mgn.Initialize()
-	if not mgn.AlarmLocations or nil == next(mgn.AlarmLocations) then
-		Msg"[MGN] "print'Alarm locations are missing!'
+	if not mgn.AlarmLocations or #mgn.AlarmLocations == 0 then
+		print("[MGN] Alarm locations are missing!")
 		return
 	end
 

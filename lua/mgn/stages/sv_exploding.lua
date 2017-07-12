@@ -1,25 +1,4 @@
-local core_info_screen
-
-local function GetCoreInfoScreen()
-	if not IsValid(core_info_screen) then
-		core_info_screen = nil
-		local screens = ents.FindByClass("lua_screen")
-
-		for i = 1, #screens do
-			local screen = screens[i]
-
-			if screen:GetPlace() == "corectrl" then
-				core_info_screen = screen
-				break
-			end
-		end
-	end
-
-	return core_info_screen
-end
-
 local core_effect
-
 local function GetCoreEffect()
 	if not IsValid(core_effect) then
 		core_effect = ents.FindByClass("lua_core_effect")[1]
@@ -30,7 +9,11 @@ end
 
 -- find out if WithinAABox works and substitute with it if possible - less homemade pasta
 local function VectorWithinBox(self, mins, maxs)
-	if self.x < math.max(mins.x, maxs.x) and self.x > math.min(mins.x, maxs.x) and self.y < math.max(mins.y, maxs.y) and self.y > math.min(mins.y, maxs.y) and self.z < math.max(mins.z, maxs.z) and self.z > math.min(mins.z, maxs.z) then return true end
+	if self.x < math.max(mins.x, maxs.x) and self.x > math.min(mins.x, maxs.x) and
+		self.y < math.max(mins.y, maxs.y) and self.y > math.min(mins.y, maxs.y) and
+		self.z < math.max(mins.z, maxs.z) and self.z > math.min(mins.z, maxs.z) then
+		return true
+	end
 
 	return false
 end -- WithinAABox didn't work for me.
@@ -38,20 +21,20 @@ end -- WithinAABox didn't work for me.
 local function ExplosionIgnoreGod(ply)
 	if ply.__mgn_ignore_god then
 		ply.__mgn_ignore_god = nil
-
 		return true
 	end
 end
 
 local function PlayerDeathSound(ply)
-	if not ply.__mgn_deadsound then return end
-	ply.__mgn_deadsound=nil
-	ply:EmitSound "physics/flesh/flesh_bloody_break.wav"
+	if not ply.__mgn_deadsound then
+		return
+	end
+
+	ply.__mgn_deadsound = nil
+	ply:EmitSound("physics/flesh/flesh_bloody_break.wav")
 
 	return true
 end
-
-local last_tick = 0
 
 mgn.Stage.Exploding = {
 	Started = false,
@@ -60,6 +43,7 @@ mgn.Stage.Exploding = {
 	Length = 22,
 	EndTime = 288,
 	Next = mgn.Stage.Idle,
+	LastTick = 0,
 	Start = function(self, time)
 		hook.Add("PlayerShouldTakeDamage", "mgn.ExplosionIgnoreGod", ExplosionIgnoreGod)
 		hook.Add("PlayerDeathSound", "mgn", PlayerDeathSound)
@@ -74,24 +58,25 @@ mgn.Stage.Exploding = {
 				ms.core_effect:SetDTBool(3, true)
 			end
 
-			if last_tick < curtime then
-				last_tick = curtime + 0.2
-				
+			if self.LastTick < curtime then
+				self.LastTick = curtime + 0.2
+
 				local core = GetCoreEffect()
 				local plys = player.GetAll()
-
 				for i = 1, #plys do
 					local ply = plys[i]
 					-- are we in the emergency room?
 					-- fix this with landmarks
-					if VectorWithinBox(ply:GetPos(), Vector(6710, 6957, -15535), Vector(10961, 4307, -14529)) then continue end
+					if VectorWithinBox(ply:GetPos(), Vector(6710, 6957, -15535), Vector(10961, 4307, -14529)) then
+						continue
+					end
+
 					-- if not, blow shit up!
 					ply.__mgn_ignore_god = true
 					ply.__mgn_deadsound = true
+
 					local dmg = DamageInfo()
-					local damage = ply:Health() * 0.3
-					damage = math.Clamp(math.ceil(damage), 33, 9999)
-					dmg:SetDamage(damage)
+					dmg:SetDamage(math.Clamp(math.ceil(ply:Health() * 0.3), 33, 9999))
 					dmg:SetDamageForce(ply:GetAngles():Up() * -2048)
 					dmg:SetDamageType(DMG_DISSOLVE)
 					dmg:SetInflictor(core)
@@ -107,8 +92,9 @@ mgn.Stage.Exploding = {
 				di:SetDamageForce(Vector(0, 0, -1))
 				di:SetDamageType(DMG_DISSOLVE)
 
-				for k, v in next, ents.FindByClass"lua_npc_wander", nil do
-					v:TakeDamageInfo(di)
+				local npcs = ents.FindByClass("lua_npc_wander")
+				for i = 1, #npcs do
+					v:TakeDamageInfo(npcs[i])
 				end
 			end
 		end
@@ -116,7 +102,7 @@ mgn.Stage.Exploding = {
 		return chrono < self.Length
 	end,
 	End = function(self, time)
-		last_tick = 0
+		self.LastTick = 0
 		hook.Remove("PlayerShouldTakeDamage", "mgn.ExplosionIgnoreGod")
 		hook.Remove("PlayerDeathSound", "mgn")
 		mgn.OverloadStart = 0
