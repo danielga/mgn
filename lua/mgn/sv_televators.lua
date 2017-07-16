@@ -6,6 +6,8 @@ local roomcenter = LMVector ~= nil and LMVector(-2083, 5142, -21, "land_caves", 
 local telearea1 = LMVector ~= nil and LMVector(-1886, 4962, -174, "land_caves", true) or nil
 local telearea2 = LMVector ~= nil and LMVector(-2289, 5281, -174, "land_caves", true) or nil
 
+local PLAYER = FindMetaTable("Player")
+
 if doorloc == nil or roomcenter == nil or telearea1 == nil or telearea2 == nil or not roomcenter:inworld() then
 	function mgn.SetEmergencyTelevationMode()
 	end
@@ -18,8 +20,6 @@ if doorloc == nil or roomcenter == nil or telearea1 == nil or telearea2 == nil o
 else
 	doorloc, telearea1, telearea2 = doorloc:pos(), telearea1:pos(), telearea2:pos()
 end
-
-local PLAYER = FindMetaTable("Player")
 
 local function GetDoor()
 	local door = ents.FindByName("cbd1")[1]
