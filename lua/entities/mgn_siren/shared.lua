@@ -17,3 +17,7 @@ sound.Add({
 	pitch = 100,
 	sound = "ambient/alarms/alarm_citizen_loop1.wav"
 })
+
+function ENT:SetupDataTables()
+	self:NetworkVar("Bool", 0, "Enabled")
+end
