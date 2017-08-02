@@ -36,7 +36,10 @@ function mgn.InitiateOverload(start)
 			stage = stage.Next
 		end
 
-		assert(stage ~= mgn.Stage.Idle, "Attempting to initiate overload with a starting time (too late to be in event).")
+		if stage == mgn.Stage.Idle then
+			print("[MGN] Attempting to initiate overload with a starting time when it is too late to be in event.")
+			start = 0
+		end
 
 		mgn.OverloadStage = stage
 		mgn.OverloadStart = start
