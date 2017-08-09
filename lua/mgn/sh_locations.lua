@@ -64,7 +64,7 @@ local function AddLightLocation(data)
 	lights = lights + 1
 
 	if not data.Position then
-		table.insert(lights_failed, alarms)
+		table.insert(lights_failed, lights)
 		return
 	end
 
