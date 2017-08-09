@@ -1,3 +1,5 @@
+local mgn = mgn
+
 mgn.VOXList = {
 	["_comma"] = {Path = "sound/vox/_comma.wav", Duration = 0.248889},
 	["_period"] = {Path = "sound/vox/_period.wav", Duration = 0.431202},

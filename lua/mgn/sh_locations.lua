@@ -1,3 +1,5 @@
+local mgn = mgn
+
 mgn.AlarmLocations = {}
 mgn.LightLocations = {}
 
@@ -6,11 +8,12 @@ if LMVector == nil then
 end
 
 local alarms = 0
+local alarms_failed = {}
 local function AddAlarmLocation(data)
 	alarms = alarms + 1
 
 	if not data.Position then
-		print("[MGN] Failed to add an entry to the list of alarm locations (#" .. alarms .. ").")
+		table.insert(alarms_failed, alarms)
 		return
 	end
 
@@ -51,12 +54,17 @@ AddAlarmLocation({Position = LMVector(-964, -1068, 13, "classroom", true), Norma
 -- Build caves
 AddAlarmLocation({Position = LMVector(-3, -1840, -25, "Smooth", true), Normal = Vector (0, -1, 0)})
 
+if #alarms_failed ~= 0 then
+	print("[MGN] Failed to add entries to list of alarm locations: " .. table.concat(alarms_failed, ", "))
+end
+
 local lights = 0
+local lights_failed = {}
 local function AddLightLocation(data)
 	lights = lights + 1
 
 	if not data.Position then
-		print("[MGN] Failed to add an entry to the list of light locations (#" .. lights .. ").")
+		table.insert(lights_failed, alarms)
 		return
 	end
 
@@ -121,3 +129,7 @@ AddLightLocation({Position = LMVector(-2429, -800, -61, "land_fish2", true), Ang
 AddLightLocation({Position = LMVector(-2438, 550, -61, "land_fish2", true), Angles = Angle(0, -90, 0), DoubleStriped = true, Width = 200, Depth = 800, SpriteSize = 32, LightCount = 10})
 AddLightLocation({Position = LMVector(25, -1635, -1, "land_fish1", true), Angles = Angle(0, 90, 0), DoubleStriped = true, Width = 100, Depth = 200, SpriteSize = 64, LightCount = 4})
 AddLightLocation({Position = LMVector(-131, -686, 4, "land_fish1", true), Angles = Angle(0, -90, 0), DoubleStriped = true, Width = 100, Depth = 400, SpriteSize = 64, LightCount = 5})
+
+if #lights_failed ~= 0 then
+	print("[MGN] Failed to add entries to list of lights locations: " .. table.concat(lights_failed, ", "))
+end

@@ -1,3 +1,5 @@
+local mgn = mgn
+
 mgn.Stage.Idle = {
 	Started = false,
 	StartedAt = 0,

@@ -1,3 +1,5 @@
+local mgn = mgn
+
 local start_time = 0
 local end_time = 0
 local alpha = 0

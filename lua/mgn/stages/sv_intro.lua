@@ -1,3 +1,5 @@
+local mgn = mgn
+
 mgn.Stage.Intro = {
 	Started = false,
 	StartedAt = 0,

@@ -1,3 +1,5 @@
+local mgn = mgn
+
 local core_info_screen
 local function GetCoreInfoScreen()
 	if not IsValid(core_info_screen) then

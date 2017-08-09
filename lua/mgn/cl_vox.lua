@@ -1,3 +1,5 @@
+local mgn = mgn
+
 include("cl_voxlist.lua")
 
 local specials = {

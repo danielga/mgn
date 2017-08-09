@@ -1,3 +1,5 @@
+local mgn = mgn
+
 include("sh_locations.lua")
 include("cl_vox.lua")
 include("stages/sh_idle.lua")

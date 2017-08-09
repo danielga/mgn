@@ -1,3 +1,5 @@
+local mgn = mgn
+
 file.CreateDir("mgn/sound")
 
 surface.CreateFont("MGN_Alert", {

@@ -7,26 +7,27 @@ function ENT:Initialize()
 	self:AddEffects(bit.bor(EF_NOSHADOW, EF_NORECEIVESHADOW))
 
 	self.CurrentLight = 0
+	self.mgn = mgn
 end
 
 function ENT:Think()
 	if self:GetEnabled() then
-		local light = mgn.LightLocations[self:GetID()]
+		local light = self.mgn.LightLocations[self:GetID()]
 		if light then
 			self.CurrentLight = (self.CurrentLight + 1) % light.LightCount
 
-			-- TODO: This is not optimal but since it's only called ~5 times a second, I'll let it slide for now
+			-- TODO: This is not optimal but since it's only called once a second, I'll let it slide for now
 			local hwidth, hdepth, hssize = light.Width / 2, light.Depth / 2, light.SpriteSize / 2
 			self:SetRenderBounds(Vector(-hdepth - hssize, -hwidth - hssize, -hssize), Vector(hdepth + hssize, hwidth + hssize, hssize))
 		end
 	end
 
-	self:SetNextClientThink(CurTime() + 0.2)
+	self:SetNextClientThink(CurTime() + 1)
 end
 
 function ENT:Draw()
 	if self:GetEnabled() then
-		local light = mgn.LightLocations[self:GetID()]
+		local light = self.mgn.LightLocations[self:GetID()]
 		if not light then
 			return
 		end

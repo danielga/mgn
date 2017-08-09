@@ -1,3 +1,5 @@
+local mgn = mgn
+
 resource.AddWorkshop("790576613") -- vox audio files
 
 AddCSLuaFile("sh_core.lua")

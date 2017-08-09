@@ -1,5 +1,7 @@
 mgn = mgn or {Stage = {}}
 
+local mgn = mgn
+
 if SERVER then
 	include("sv_core.lua")
 else

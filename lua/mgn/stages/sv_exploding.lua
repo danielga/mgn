@@ -1,3 +1,5 @@
+local mgn = mgn
+
 local core_effect
 local function GetCoreEffect()
 	if not IsValid(core_effect) then

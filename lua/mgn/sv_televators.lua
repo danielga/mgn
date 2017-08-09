@@ -1,3 +1,5 @@
+local mgn = mgn
+
 local doorloc = LMVector ~= nil and LMVector(-2091, 4912, -70, "land_caves", true) or nil
 local doorradius = 100
 local roomcenter = LMVector ~= nil and LMVector(-2083, 5142, -21, "land_caves", true) or nil

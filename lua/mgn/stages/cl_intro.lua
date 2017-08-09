@@ -1,3 +1,5 @@
+local mgn = mgn
+
 file.CreateDir("mgn/sound")
 
 mgn.IntroMusicDownload = "https://metastruct.github.io/mgn/sound/intro_music.mp3"
