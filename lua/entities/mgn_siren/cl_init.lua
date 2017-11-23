@@ -22,3 +22,9 @@ end
 function ENT:Draw()
 	self:DrawModel()
 end
+
+net.Receive("mgn_siren",function()
+	for k,v in next,ents.FindByClass"mgn_siren" do 
+		v:SetEnabled(false)
+	end
+end)

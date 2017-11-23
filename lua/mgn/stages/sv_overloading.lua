@@ -60,6 +60,8 @@ mgn.Stage.Overloading = {
 			local pair = mgn.AlarmEntities[i]
 			pair.Light:SetEnabled(false)
 			pair.Siren:SetEnabled(false)
+			net.Start"mgn_siren"
+			net.Broadcast()
 		end
 
 		for i = 1, #mgn.LightEntities do
