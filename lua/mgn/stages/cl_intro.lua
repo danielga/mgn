@@ -64,6 +64,11 @@ mgn.Stage.Intro = {
 			end
 
 			intro_volume = math.Clamp(intro_volume + FrameTime() * (overloading and 0.5 or -0.5), 0, 0.7)
+
+			if system.IsWindows() and not system.HasFocus() then
+				intro_volume = 0
+			end
+
 			mgn.IntroMusic:SetVolume(intro_volume)
 
 			if math.abs(chrono - mgn.IntroMusic:GetTime()) >= 1 then

@@ -123,6 +123,11 @@ mgn.Stage.Overloading = {
 			if math.abs(chrono - mgn.CountdownMusic:GetTime()) >= 1 then
 				mgn.CountdownMusic:SetTime(chrono)
 			end
+
+			if system.IsWindows() then
+				mgn.CountdownMusic:SetVolume( system.HasFocus() and 1 or 0 )
+			end
+			
 		end
 
 		return chrono < self.Length
