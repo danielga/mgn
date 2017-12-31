@@ -26,15 +26,20 @@ mgn.Stage.Overloading = {
 	EndTime = 266,
 	Next = mgn.Stage.Exploding,
 	Start = function(self, time)
+
 		for i = 1, #mgn.AlarmEntities do
 			local pair = mgn.AlarmEntities[i]
 			pair.Light:SetEnabled(true)
-			pair.Siren:SetEnabled(true)
+			-- pair.Siren:SetEnabled(true) handled by mgn_alarms_enabled
 		end
 
+		--[[
 		for i = 1, #mgn.LightEntities do
 			mgn.LightEntities[i]:SetEnabled(true)
 		end
+		]]
+		
+		SetGlobalBool( "mgn_alarms_enabled", true )
 
 		mgn.SetEmergencyTelevationMode(true)
 
@@ -56,17 +61,25 @@ mgn.Stage.Overloading = {
 		return chrono < self.Length
 	end,
 	End = function(self, time)
+		
 		for i = 1, #mgn.AlarmEntities do
 			local pair = mgn.AlarmEntities[i]
 			pair.Light:SetEnabled(false)
-			pair.Siren:SetEnabled(false)
-			net.Start"mgn_siren"
-			net.Broadcast()
-		end
 
+			-- handled by mgn_alarms_enabled
+			-- pair.Siren:SetEnabled(false)
+			-- net.Start"mgn_siren"
+			-- net.Broadcast()
+		end
+		
+
+		--[[
 		for i = 1, #mgn.LightEntities do
 			mgn.LightEntities[i]:SetEnabled(false)
 		end
+		]]
+		
+		SetGlobalBool( "mgn_alarms_enabled", false )
 
 		mgn.SetEmergencyTelevationMode(false)
 

@@ -1,7 +1,7 @@
 include("shared.lua")
 
 function ENT:Think()
-	if self:GetEnabled() then
+	if self:GetEnabled() or GetGlobalBool( "mgn_alarms_enabled", false ) then
 		self.Sound = CreateSound(self, "alarm_citizen_loop1")
 		self.Sound:Play()
 	elseif self.Sound then

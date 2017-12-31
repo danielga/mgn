@@ -11,7 +11,7 @@ function ENT:Initialize()
 end
 
 function ENT:Think()
-	if self:GetEnabled() then
+	if self:GetEnabled() or GetGlobalBool( "mgn_alarms_enabled", false ) then
 		local light = self.mgn.LightLocations[self:GetID()]
 		if light then
 			self.CurrentLight = (self.CurrentLight + 1) % light.LightCount
@@ -26,7 +26,7 @@ function ENT:Think()
 end
 
 function ENT:Draw()
-	if self:GetEnabled() then
+	if self:GetEnabled() or GetGlobalBool( "mgn_alarms_enabled", false ) then
 		local light = self.mgn.LightLocations[self:GetID()]
 		if not light then
 			return
