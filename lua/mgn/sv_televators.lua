@@ -79,14 +79,18 @@ function mgn.SetEmergencyTelevationMode(state)
 end
 
 local vec = Vector(0, 0, telearea1.z)
-local function FindEscapePos(ply)
+local function FindEscapePos(ply,inplayers)
 	vec.z = telearea1.z
 
 	for i = 1, 100 do
 		vec.x = math.Rand(telearea1.x, telearea2.x)
 		vec.y = math.Rand(telearea1.y, telearea2.y)
-		if not ply:IsStuck(false, vec) then
+		local stuck,inwhat = ply:IsStuck(false, vec)
+		if not stuck then
 			return vec
+		elseif inplayers and IsValid(inwhat) and inwhat:IsPlayer() then
+			print("GOTPLY",inwhat)
+			return vec,inwhat
 		end
 	end
 
@@ -94,8 +98,12 @@ local function FindEscapePos(ply)
 	for i = 1, 100 do
 		vec.x = math.Rand(telearea1.x, telearea2.x)
 		vec.y = math.Rand(telearea1.y, telearea2.y)
-		if not ply:IsStuck(true, vec) then
+		local stuck,inwhat = ply:IsStuck(true, vec)
+		if not stuck then
 			return vec
+		elseif inplayers and IsValid(inwhat) and inwhat:IsPlayer() then
+			print("GOTPLY2",inwhat)
+			return vec,inwhat
 		end
 	end
 
@@ -122,29 +130,62 @@ local function Tesla(pos)
 	tesla:Fire("Kill", "", 1)
 end
 
+
+local function DISS(pl,pl2)
+	local dmgme
+	hook.Add("PlayerShouldTakeDamage",'dmghackdissolve123',function(pl,a)
+		if dmgme and dmgme == pl then dmgme = nil return true end
+	end)
+	
+	
+	local dmg = DamageInfo()
+	dmg:SetDamage(pl:Health())
+	dmg:SetDamageForce(VectorRand()*300)
+	dmg:SetDamageType(bit.bor(DMG_DISSOLVE,DMG_ALWAYSGIB))
+	dmg:SetInflictor(game.GetWorld())
+	dmg:SetAttacker(pl2)
+	dmgme=pl
+	pl:EmitSound'ambient/energy/weld2.wav'
+	pl:TakeDamageInfo(dmg)
+	
+	hook.Remove("PlayerShouldTakeDamage",'dmghackdissolve123')
+end
+
+--DISS(me,earu)
+local function ensurevalid(ply)
+	if not ply:IsValid() or not ply:Alive()or (ply:GetParent():IsValid() and not ply:InVehicle()) then coroutine.yield() end
+	
+end
+
 local function TelevateCoroutine(ply, scr, edat)
 	ply:EmitSound("buttons/button1.wav")
 
-	co.sleep(0.1)
+	co.sleep(0.1) ensurevalid(ply)
 
 	ply:EmitSound("hl1/ambience/port_suckout1.wav")
 
 	util.ScreenShake(ply:GetPos(), 0.6, 4, 4, 128)
 
-	co.sleep(2.5)
+	co.sleep(2.5) ensurevalid(ply)
 
 	local white = Color(255, 255, 255, 255)
 	ply:EmitSound("ambient/voices/citizen_beaten3.wav")
 	ply:ScreenFade(SCREENFADE.IN, white, 1, 1)
 
-	co.sleep(0.5)
-
+	co.sleep(0.5) ensurevalid(ply)
+	
+	if ply:InVehicle() then ply:ExitVehicle() end
+	
 	local center = ply:OBBCenter()
 	Tesla(ply:GetPos() + center)
-	local escpos = FindEscapePos(ply)
+	local escpos,ply2 = FindEscapePos(ply,true)
 	ply:SetPos(escpos)
 	Tesla(escpos + center)
 	ply:ScreenFade(SCREENFADE.IN, white, 1, 1)
+	if ply2 then
+		DISS(ply,ply2)
+		DISS(ply2,ply)
+	end
 end
 
 function PLAYER:EmergencyTelevate(screen, edat)
