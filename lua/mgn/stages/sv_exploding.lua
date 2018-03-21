@@ -4,6 +4,9 @@ local core_effect
 local function GetCoreEffect()
 	if not IsValid(core_effect) then
 		core_effect = ents.FindByClass("lua_core_effect")[1]
+		if not IsValid(core_effect) then
+			core_effect = ents.FindByClass("meta_core")[1]
+		end
 	end
 
 	return core_effect
@@ -64,6 +67,9 @@ mgn.Stage.Exploding = {
 				self.LastTick = curtime + 0.2
 
 				local core = GetCoreEffect()
+				if not IsValid(core) then
+					core = game.GetWorld()
+				end
 				local plys = player.GetAll()
 				for i = 1, #plys do
 					local ply = plys[i]
