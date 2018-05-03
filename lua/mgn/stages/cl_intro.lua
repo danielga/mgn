@@ -52,10 +52,10 @@ mgn.Stage.Intro = {
 		end)
 	end,
 	Think = function(self, chrono)
-		if IsValid(mgn.IntroMusic) then
-			if localplayer:IsInZone("reactor") and not overloading then
+		if IsValid(mgn.IntroMusic) and ms then
+			if ms:InCore() and not overloading then
 				overloading = true
-			elseif not localplayer:IsInZone("reactor") and overloading then
+			elseif not ms:InCore() and overloading then
 				overloading = false
 			end
 
