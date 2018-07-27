@@ -79,6 +79,11 @@ mgn.Stage.Exploding = {
 						continue
 					end
 
+					-- does this player have MGN blocked?
+					if ply:GetInfoNum( mgn.HideCVarName, 0 ) ~= 0 then
+						continue
+					end
+
 					-- if not, blow shit up!
 					ply.__mgn_ignore_god = true
 					ply.__mgn_deadsound = true

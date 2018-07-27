@@ -1,5 +1,7 @@
 local mgn = mgn
 
+mgn.HideCVar = CreateClientConVar( mgn.HideCVarName, "0", true, true )
+
 include("sh_locations.lua")
 include("cl_vox.lua")
 include("stages/sh_idle.lua")
@@ -67,4 +69,16 @@ function mgn.InterruptOverload()
 
 	mgn.OverloadStage = mgn.Stage.Idle
 	mgn.OverloadStart = 0
+end
+
+function mgn.RunHideCheck( stage )
+
+	if mgn.HideCVar:GetBool() then
+		if stage.Started then
+			mgn.StopStage( stage )
+			mgn.OverloadStage = mgn.Stage.Idle
+		end
+		return true
+	end
+
 end

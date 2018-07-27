@@ -1,7 +1,11 @@
 include("shared.lua")
 
+function ENT:ShouldActivate()
+	return not self.mgn.HideCVar:GetBool() and ( self:GetEnabled() or GetGlobalBool( "mgn_alarms_enabled", false ) )
+end
+
 function ENT:Think()
-	if self:GetEnabled() or GetGlobalBool( "mgn_alarms_enabled", false ) then
+	if self:ShouldActivate() then
 		self.Sound = CreateSound(self, "alarm_citizen_loop1")
 		self.Sound:Play()
 	elseif self.Sound then
