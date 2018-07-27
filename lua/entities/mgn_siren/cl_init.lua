@@ -1,7 +1,7 @@
 include("shared.lua")
 
 function ENT:ShouldActivate()
-	return not self.mgn.HideCVar:GetBool() and ( self:GetEnabled() or GetGlobalBool( "mgn_alarms_enabled", false ) )
+	return not mgn.HideCVar:GetBool() and ( self:GetEnabled() or GetGlobalBool( "mgn_alarms_enabled", false ) )
 end
 
 function ENT:Think()
