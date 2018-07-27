@@ -76,8 +76,8 @@ function mgn.RunHideCheck( stage )
 	if mgn.HideCVar:GetBool() then
 		if stage.Started then
 			mgn.StopStage( stage )
-			mgn.OverloadStage = mgn.Stage.Idle
 		end
+		mgn.OverloadStage = mgn.Stage.Idle
 		return true
 	end
 
