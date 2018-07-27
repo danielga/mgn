@@ -63,7 +63,7 @@ hook.Add("Think", "mgn.StageLogic", function()
 	local stage = mgn.GetOverloadStage()
 
 	if CLIENT then
-		local halt = mgn.RunHideLogic( stage )
+		local halt = mgn.RunHideCheck( stage )
 		if halt then return end
 	end
 
