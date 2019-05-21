@@ -93,6 +93,8 @@ local function OverloadingHUD()
 	draw.SimpleTextOutlined(FormatTime(time_left), "MGN_Countdown", ScrW() * 0.5, ScrH() * 0.028, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 4, Color(0, 0, 0, 127))
 end
 
+local snd_mute_losefocus = GetConVar("snd_mute_losefocus")
+
 mgn.Stage.Overloading = {
 	Started = false,
 	StartedAt = 0,
@@ -125,9 +127,12 @@ mgn.Stage.Overloading = {
 			end
 
 			if system.IsWindows() then
-				mgn.CountdownMusic:SetVolume( system.HasFocus() and 1 or 0 )
+				if snd_mute_losefocus:GetBool() then
+					mgn.CountdownMusic:SetVolume( system.HasFocus() and 1 or 0 )
+				else
+					mgn.CountdownMusic:SetVolume( 1 )
+				end
 			end
-			
 		end
 
 		return chrono < self.Length
