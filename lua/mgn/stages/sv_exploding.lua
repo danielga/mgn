@@ -70,6 +70,7 @@ mgn.Stage.Exploding = {
 				if not IsValid(core) then
 					core = game.GetWorld()
 				end
+
 				local plys = player.GetAll()
 				for i = 1, #plys do
 					local ply = plys[i]

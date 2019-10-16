@@ -13,4 +13,4 @@ function ENT:OnRemove()
 	self:SetEnabled(false)
 end
 
-util.AddNetworkString"mgn_siren"
+util.AddNetworkString("mgn_siren")

@@ -128,9 +128,9 @@ mgn.Stage.Overloading = {
 
 			if system.IsWindows() then
 				if snd_mute_losefocus:GetBool() then
-					mgn.CountdownMusic:SetVolume( system.HasFocus() and 1 or 0 )
+					mgn.CountdownMusic:SetVolume(system.HasFocus() and 1 or 0)
 				else
-					mgn.CountdownMusic:SetVolume( 1 )
+					mgn.CountdownMusic:SetVolume(1)
 				end
 			end
 		end

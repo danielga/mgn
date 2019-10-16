@@ -25,8 +25,7 @@ function mgn.IsOverloading()
 	return mgn.GetOverloadStage() ~= mgn.Stage.Idle
 end
 
-function mgn.StartStage( stage )
-
+function mgn.StartStage(stage)
 	local start_time = mgn.GetOverloadStart() + stage.StartTime
 	stage.StartedAt = start_time
 
@@ -35,36 +34,31 @@ function mgn.StartStage( stage )
 	end
 
 	stage.Started = true
-
 end
-function mgn.StopStage( stage )
 
+function mgn.StopStage(stage)
 	if stage.End then
-		stage:End(curtime)
+		stage:End(CurTime())
 	end
 
 	stage.Started = false
 	stage.StartedAt = 0
 
 	mgn.OverloadStage = stage.Next
-
 end
 
 
 hook.Add("PlayerNoClip", "mgn.PlayerNoClip", function(ply)
 	local stage = mgn.GetOverloadStage()
-	if (stage == mgn.Stage.Overloading or stage == mgn.Stage.Exploding) and ply:GetMoveType() ~= MOVETYPE_NOCLIP and ply:GetInfoNum( mgn.HideCVarName, 0 ) == 0 then
+	if (stage == mgn.Stage.Overloading or stage == mgn.Stage.Exploding) and ply:GetMoveType() ~= MOVETYPE_NOCLIP and ply:GetInfoNum(mgn.HideCVarName, 0) == 0 then
 		return false
 	end
 end)
 
 hook.Add("Think", "mgn.StageLogic", function()
-
 	local stage = mgn.GetOverloadStage()
-
-	if CLIENT then
-		local halt = mgn.RunHideCheck( stage )
-		if halt then return end
+	if CLIENT and mgn.RunHideCheck(stage) then
+		return
 	end
 
 	-- This stage is permanent since it can't tell us when it ends
@@ -72,13 +66,11 @@ hook.Add("Think", "mgn.StageLogic", function()
 		return
 	end
 
-	local curtime = CurTime()
 	if not stage.Started then
-		mgn.StartStage( stage )
+		mgn.StartStage(stage)
 	end
 
-	if not stage:Think(curtime - stage.StartedAt) then
-		mgn.StopStage( stage )
+	if not stage:Think(CurTime() - stage.StartedAt) then
+		mgn.StopStage(stage)
 	end
-
 end)

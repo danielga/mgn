@@ -24,9 +24,9 @@ else
 end
 
 local function GetDoor()
-	local door = ents.FindByName("cbd1")[1]
-	if IsValid(door) then
-		return door
+	local cbd1 = ents.FindByName("cbd1")[1]
+	if IsValid(cbd1) then
+		return cbd1
 	end
 
 	local doors = ents.FindInSphere(doorloc, doorradius)
@@ -59,7 +59,7 @@ function mgn.SetEmergencyTelevationMode(state)
 		local tid = "unlock_door_" .. door:EntIndex()
 		if state then
 			if timer.Exists(tid) then
-				timer.Destroy(tid)
+				timer.Remove(tid)
 			end
 
 			door:Fire("close")
@@ -75,22 +75,20 @@ function mgn.SetEmergencyTelevationMode(state)
 			end)
 		end
 	end
-
 end
 
 local vec = Vector(0, 0, telearea1.z)
-local function FindEscapePos(ply,inplayers)
+local function FindEscapePos(ply, inplayers)
 	vec.z = telearea1.z
 
 	for i = 1, 100 do
 		vec.x = math.Rand(telearea1.x, telearea2.x)
 		vec.y = math.Rand(telearea1.y, telearea2.y)
-		local stuck,inwhat = ply:IsStuck(false, vec)
+		local stuck, inwhat = ply:IsStuck(false, vec)
 		if not stuck then
 			return vec
 		elseif inplayers and IsValid(inwhat) and inwhat:IsPlayer() then
-			print("GOTPLY",inwhat)
-			return vec,inwhat
+			return vec, inwhat
 		end
 	end
 
@@ -98,12 +96,11 @@ local function FindEscapePos(ply,inplayers)
 	for i = 1, 100 do
 		vec.x = math.Rand(telearea1.x, telearea2.x)
 		vec.y = math.Rand(telearea1.y, telearea2.y)
-		local stuck,inwhat = ply:IsStuck(true, vec)
+		local stuck, inwhat = ply:IsStuck(true, vec)
 		if not stuck then
 			return vec
 		elseif inplayers and IsValid(inwhat) and inwhat:IsPlayer() then
-			print("GOTPLY2",inwhat)
-			return vec,inwhat
+			return vec, inwhat
 		end
 	end
 
@@ -130,61 +127,65 @@ local function Tesla(pos)
 	tesla:Fire("Kill", "", 1)
 end
 
+hook.Add("PlayerShouldTakeDamage", "DissolveDamageHack", function(vic)
+	if vic.MGNBypassDamage then
+		return true
+	end
+end)
 
-local function DISS(pl,pl2)
-	local dmgme
-	hook.Add("PlayerShouldTakeDamage",'dmghackdissolve123',function(pl,a)
-		if dmgme and dmgme == pl then dmgme = nil return true end
-	end)
-	
-	
+local function Dissolve(vic, att)
 	local dmg = DamageInfo()
-	dmg:SetDamage(pl:Health())
-	dmg:SetDamageForce(VectorRand()*300)
-	dmg:SetDamageType(bit.bor(DMG_DISSOLVE,DMG_ALWAYSGIB))
+	dmg:SetDamage(vic:Health())
+	dmg:SetDamageForce(VectorRand() * 300)
+	dmg:SetDamageType(bit.bor(DMG_DISSOLVE, DMG_ALWAYSGIB))
 	dmg:SetInflictor(game.GetWorld())
-	dmg:SetAttacker(pl2)
-	dmgme=pl
-	pl:EmitSound'ambient/energy/weld2.wav'
-	pl:TakeDamageInfo(dmg)
-	
-	hook.Remove("PlayerShouldTakeDamage",'dmghackdissolve123')
+	dmg:SetAttacker(att)
+	vic:EmitSound("ambient/energy/weld2.wav")
+
+	vic.MGNBypassDamage = true
+	vic:TakeDamageInfo(dmg)
+	vic.MGNBypassDamage = false
 end
 
---DISS(me,earu)
-local function ensurevalid(ply)
-	if not ply:IsValid() or not ply:Alive()or (ply:GetParent():IsValid() and not ply:InVehicle()) then coroutine.yield() end
-	
+local function EnsureValid(ply)
+	if not IsValid(ply) or not ply:Alive() or (IsValid(ply:GetParent()) and not ply:InVehicle()) then
+		coroutine.yield()
+	end
 end
 
 local function TelevateCoroutine(ply, scr, edat)
 	ply:EmitSound("buttons/button1.wav")
 
-	co.sleep(0.1) ensurevalid(ply)
+	co.sleep(0.1)
+	EnsureValid(ply)
 
 	ply:EmitSound("hl1/ambience/port_suckout1.wav")
 
 	util.ScreenShake(ply:GetPos(), 0.6, 4, 4, 128)
 
-	co.sleep(2.5) ensurevalid(ply)
+	co.sleep(2.5)
+	EnsureValid(ply)
 
 	local white = Color(255, 255, 255, 255)
 	ply:EmitSound("ambient/voices/citizen_beaten3.wav")
 	ply:ScreenFade(SCREENFADE.IN, white, 1, 1)
 
-	co.sleep(0.5) ensurevalid(ply)
-	
-	if ply:InVehicle() then ply:ExitVehicle() end
-	
+	co.sleep(0.5)
+	EnsureValid(ply)
+
+	if ply:InVehicle() then
+		ply:ExitVehicle()
+	end
+
 	local center = ply:OBBCenter()
 	Tesla(ply:GetPos() + center)
-	local escpos,ply2 = FindEscapePos(ply,true)
+	local escpos, ply2 = FindEscapePos(ply, true)
 	ply:SetPos(escpos)
 	Tesla(escpos + center)
 	ply:ScreenFade(SCREENFADE.IN, white, 1, 1)
-	if ply2 then
-		DISS(ply,ply2)
-		DISS(ply2,ply)
+	if ply2 ~= nil then
+		Dissolve(ply, ply2)
+		Dissolve(ply2, ply)
 	end
 end
 

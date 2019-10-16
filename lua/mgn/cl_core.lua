@@ -71,14 +71,15 @@ function mgn.InterruptOverload()
 	mgn.OverloadStart = 0
 end
 
-function mgn.RunHideCheck( stage )
-
-	if mgn.HideCVar:GetBool() then
-		if stage.Started then
-			mgn.StopStage( stage )
-		end
-		mgn.OverloadStage = mgn.Stage.Idle
-		return true
+function mgn.RunHideCheck(stage)
+	if not mgn.HideCVar:GetBool() then
+		return false
 	end
 
+	if stage.Started then
+		mgn.StopStage(stage)
+	end
+
+	mgn.OverloadStage = mgn.Stage.Idle
+	return true
 end
