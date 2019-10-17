@@ -53,7 +53,7 @@ mgn.Stage.Overloading = {
 		local plys = player.GetAll()
 		for i = 1, #plys do
 			local ply = plys[i]
-			if ply:GetInfoNum( mgn.HideCVarName, 0 ) ~= 0 then continue end
+			if ply:GetInfoNum(mgn.HideCVarName, 0) ~= 0 then continue end
 			ply:SetMoveType(MOVETYPE_WALK)
 			ply._fly_restrict = true
 		end

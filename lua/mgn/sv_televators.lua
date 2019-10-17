@@ -128,7 +128,8 @@ local function Tesla(pos)
 end
 
 hook.Add("PlayerShouldTakeDamage", "DissolveDamageHack", function(vic)
-	if vic.MGNBypassDamage then
+	if vic.__mgn_ignore_god then
+		vic.__mgn_ignore_god = nil
 		return true
 	end
 end)
@@ -142,9 +143,8 @@ local function Dissolve(vic, att)
 	dmg:SetAttacker(att)
 	vic:EmitSound("ambient/energy/weld2.wav")
 
-	vic.MGNBypassDamage = true
+	vic.__mgn_ignore_god = true
 	vic:TakeDamageInfo(dmg)
-	vic.MGNBypassDamage = false
 end
 
 local function EnsureValid(ply)

@@ -1,6 +1,6 @@
 local mgn = mgn
 
-mgn.HideCVar = CreateClientConVar( mgn.HideCVarName, "0", true, true )
+mgn.HideCVar = CreateClientConVar(mgn.HideCVarName, "0", true, true)
 
 include("sh_locations.lua")
 include("cl_vox.lua")

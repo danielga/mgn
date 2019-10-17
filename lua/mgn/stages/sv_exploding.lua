@@ -81,7 +81,7 @@ mgn.Stage.Exploding = {
 					end
 
 					-- does this player have MGN blocked?
-					if ply:GetInfoNum( mgn.HideCVarName, 0 ) ~= 0 then
+					if ply:GetInfoNum(mgn.HideCVarName, 0) ~= 0 then
 						continue
 					end
 
