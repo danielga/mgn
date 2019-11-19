@@ -12,7 +12,9 @@ local function ExtractPitch(part)
 	local pitch = nil
 	part = part:gsub(":pitch%((%-?%d+)%)", function(p)
 		p = tonumber(p)
-		if not p then return "" end
+		if p == nil then
+			return ""
+		end
 
 		pitch = math.Clamp(p, 50, 255)
 		return ""
@@ -22,14 +24,14 @@ local function ExtractPitch(part)
 end
 
 local function PlayPart(part)
-	if part.Pitch then
+	if part.Pitch ~= nil then
 		local s = CreateSound(LocalPlayer(), part.Path:sub(6))
 		s:Play()
 		s:ChangePitch(part.Pitch)
 		co.sleep(part.Duration * (100 / part.Pitch))
 	else
 		local cb = co.newcb()
-		sound.PlayFile(part.Path, '', cb)
+		sound.PlayFile(part.Path, "", cb)
 		co.waitcb(cb)
 		co.sleep(part.Duration)
 	end
@@ -41,16 +43,18 @@ function mgn.VOX(text)
 	for i = 1, #text do
 		local char = text:sub(i, i)
 		local special = specials[char]
-		if special then
+		if special ~= nil then
 			if #chars > 0 then
 				local part = table.concat(chars)
 				local stripped_part, pitch = ExtractPitch(part)
 				local data = mgn.VOXList[stripped_part]
-				if data then
-					part = { Path = data.Path, Duration = data.Duration }
-					if pitch then
+				if data ~= nil then
+					part = {Path = data.Path, Duration = data.Duration}
+
+					if pitch ~= nil then
 						part.Pitch = pitch
 					end
+
 					table.insert(parts, part)
 				end
 
@@ -67,11 +71,13 @@ function mgn.VOX(text)
 				local part = table.concat(chars)
 				local stripped_part, pitch = ExtractPitch(part)
 				local data = mgn.VOXList[stripped_part]
-				if data then
-					part = { Path = data.Path, Duration = data.Duration }
-					if pitch then
+				if data ~= nil then
+					part = {Path = data.Path, Duration = data.Duration}
+
+					if pitch ~= nil then
 						part.Pitch = pitch
 					end
+
 					table.insert(parts, part)
 				end
 			end
@@ -79,8 +85,8 @@ function mgn.VOX(text)
 	end
 
 	co(function(sounds)
-		for _, part in ipairs(sounds) do
-			PlayPart(part)
+		for i = 1, #sounds do
+			PlayPart(sounds[i])
 		end
 	end, parts)
 end
