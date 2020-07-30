@@ -585,7 +585,6 @@ mgn.VOXList = {
 	["violated"] = {Path = "sound/vox/violated.wav", Duration = 0.895873},
 	["violation"] = {Path = "sound/vox/violation.wav", Duration = 0.937324},
 	["voltage"] = {Path = "sound/vox/voltage.wav", Duration = 0.708027},
-	["vox_login"] = {Path = "sound/vox/vox_login.wav", Duration = 10.288889},
 	["walk"] = {Path = "sound/vox/walk.wav", Duration = 0.471927},
 	["wall"] = {Path = "sound/vox/wall.wav", Duration = 0.559274},
 	["want"] = {Path = "sound/vox/want.wav", Duration = 0.479184},
