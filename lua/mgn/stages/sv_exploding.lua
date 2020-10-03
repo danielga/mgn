@@ -41,6 +41,22 @@ local function PlayerDeathSound(ply)
 	return true
 end
 
+local safeAA = LMVector ~= nil and LMVector(-1424, -2546, 746, "Smooth", true)
+safeAA = safeAA ~= nil and safeAA:ToWorld() or Vector(6710, 6957, -15535)
+
+local safeBB = LMVector ~= nil and LMVector(1548, 2577, -836, "Smooth", true)
+safeBB = safeBB ~= nil and safeBB:ToWorld() or Vector(10961, 4307, -14529)
+
+local function IsInSafeRoom(ply)
+	local pos = ply:GetPos()
+	if ply.msasafe then
+		return true
+	end
+
+	return VectorWithinBox(pos, safeAA, safeBB)
+
+end
+
 mgn.Stage.Exploding = {
 	Started = false,
 	StartedAt = 0,
@@ -76,7 +92,7 @@ mgn.Stage.Exploding = {
 					local ply = plys[i]
 					-- are we in the emergency room?
 					-- fix this with landmarks
-					if VectorWithinBox(ply:GetPos(), Vector(6710, 6957, -15535), Vector(10961, 4307, -14529)) then
+					if IsInSafeRoom(ply) then
 						continue
 					end
 
