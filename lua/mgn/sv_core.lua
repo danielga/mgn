@@ -12,6 +12,8 @@ AddCSLuaFile("stages/cl_exploding.lua")
 AddCSLuaFile("stages/cl_overloading.lua")
 AddCSLuaFile("stages/cl_intro.lua")
 
+pcall(require, "landmark")
+
 include("sv_televators.lua") -- metastruct televators specific code
 include("sh_locations.lua") -- metastruct specific entity placements
 include("stages/sh_idle.lua")
