@@ -1,12 +1,28 @@
 local mgn = mgn
 
-local doorloc = LMVector ~= nil and LMVector(-2091, 4912, -70, "land_caves", true) or nil
-local doorradius = 100
-local roomcenter = LMVector ~= nil and LMVector(-2083, 5142, -21, "land_caves", true) or nil
-
+local doorloc = nil
+local doorradius = nil
+local roomcenter = nil
 -- land position for emergency teleport target
-local telearea1 = LMVector ~= nil and LMVector(-1886, 4962, -174, "land_caves", true) or nil
-local telearea2 = LMVector ~= nil and LMVector(-2289, 5281, -174, "land_caves", true) or nil
+local telearea1 = nil
+local telearea2 = nil
+
+if LMVector ~= nil then
+	local version = string.match(game.GetMap(), "^gm_construct_m3_(%d+)$")
+	if version ~= nil and tonumber(version) >= 195 then
+		doorloc = LMVector(1496, -2, -163, "Smooth", true)
+		doorradius = 100
+		roomcenter = LMVector(1314, 12, -119, "Smooth", true)
+		telearea1 = LMVector(1149, -97, -207, "Smooth", true)
+		telearea2 = LMVector(1475, 93, -207, "Smooth", true)
+	else
+		doorloc = LMVector(-2091, 4912, -70, "land_caves", true)
+		doorradius = 100
+		roomcenter = LMVector(-2083, 5142, -21, "land_caves", true)
+		telearea1 = LMVector(-1886, 4962, -174, "land_caves", true)
+		telearea2 = LMVector(-2289, 5281, -174, "land_caves", true)
+	end
+end
 
 local PLAYER = FindMetaTable("Player")
 
